@@ -1,0 +1,6 @@
+cron:
+- description: Cria resumo de contribuicoes por usuario
+  url: /cron/storypartsbyuser
+  schedule: every 30 minutes
+  target: 2
+

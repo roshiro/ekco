@@ -1,0 +1,31 @@
+{% extends "_base.html" %}
+
+{% block title %}
+	<title>Ek Foto</title>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="span12" id="headline">
+		<h3>Agora você está conectado com o Ek Foto</h3>
+		Em breve você receberá mais informações sobre nova verão Beta.
+	</div>
+</div>
+<div class="row">
+		<div class="span3">
+			<img class="home-avatar left img-polaroid" src="{{ loggedInUser.avatar_thumb }}?type=large" alt="{{ loggedInUser.name }}" />			
+		</div>
+		<div class="span9">
+			<h3>{{ loggedInUser.name }}</h3>
+			<ul>
+				<li><i class="icon-map-marker"></i> {{ loggedInUser.location }}</li>
+				{% if loggedInUser.work %}
+					<li><i class="icon-camera"></i> {{ loggedInUser.work }}</li>
+				{% endif %}
+			</ul>
+		</div>
+</div>
+{% endblock %}
+
+{% block extrascripts %}
+{% endblock %}

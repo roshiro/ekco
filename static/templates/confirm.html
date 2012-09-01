@@ -1,0 +1,16 @@
+<div class="modal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">×</button>
+		<h3>{{ header }}</h3>
+	</div>
+	<div class="modal-body">
+		<p>{{ message }}</p>
+	</div>
+	<div class="modal-footer">
+		<input type="hidden" id="storyId" value="{{ storyId }}" />
+		<a id="confirm" class="btn btn-primary" data-dismiss="modal">Sim</a>
+		<a class="btn" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
+
+<script>tellynn.loader.initConfirm()</script>

@@ -1,0 +1,36 @@
+application: ekfotoco
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /stylesheets
+  static_dir: static/stylesheets
+- url: /js
+  static_dir: static/js
+- url: /images
+  static_dir: static/images
+- url: /templates
+  static_dir: static/templates
+- url: /bootstrap
+  static_dir: static/bootstrap  
+
+- url: /(.*\.(txt|html|xml))
+  static_files: static/\1
+  upload: static/(.*\.(txt|html|xml))
+
+- url: /cron/.*
+  script: cronhandler.py
+
+- url: /queue/.*
+  script: queueworker.py
+
+- url: /.*
+  script: mainhandler.py
+
+
+error_handlers:
+- file: 404.html
+
+builtins:
+- datastore_admin: on

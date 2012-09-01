@@ -1,0 +1,28 @@
+{% extends "_base.html" %}
+
+{% block title %}
+	<title>Promova seu portfólio, aumente a visibilidade do seu trabalho e conquiste mais clientes - Ek Foto</title>
+{% endblock %}
+
+{% block content %}
+	<div id="slogan-text" class="span8 round">
+		<div class="headline-landing">
+			<center><span>Promova</span> seu portfólio, aumente a <br> <span>visibilidade</span> de seu trabalho <br>e <span>conquiste</span> novos clientes.</center>
+		</div>
+		<div id="facebook-button">
+			<center>			
+			<a id="btn-login-facebook" class="facebook-login-button serveFacebook" href="https://www.facebook.com/dialog/oauth?client_id={{ faceAppId }}&redirect_uri={{ faceRedirectUrl }}&scope=email,user_location&state=landingpage">
+				<div id="serveFacebook" class="serveFacebook-fill">
+				  <img alt="Servefacebook" src="/images/serveFacebook.png">
+				  <h1><b>Conecte-se</b> com <b>Facebook</b></h1>
+				</div>
+				<img id="Servefacebook_loader" alt="Servefacebook_loader" class="serveLoading serveLoading-Facebook" src="/images/serveFacebook_loader.gif" style="display:none">
+			</a>
+			</center>
+		</div>
+	</div>
+	<div class="fb-like-landing fb-like-index fb-like" data-href="https://www.facebook.com/ekfoto.co" data-send="true" data-width="650" data-show-faces="false"></div>
+{% endblock %}
+
+{% block extrascripts %}
+{% endblock %}

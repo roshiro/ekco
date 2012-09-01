@@ -1,0 +1,20 @@
+FACEBOOK
+	
+EkFoto
+App ID:	
+App Secret:	
+
+
+PubNub
+Publish: 
+Subscribe: 
+Secret: 
+http://pubsub.pubnub.com
+	/publish
+	/pub-key
+	/sub-key
+	/signature
+	/channel
+	/callback
+	/message
+curl -X GET http://pubsub.pubnub.com/publish/pub-938dc40b-f3b7-48d9-98be-80bfe1f362f4/sub-8f617717-ab23-11e1-bef1-0524acf3b8cb/sec-OGFlZmM2ZWUtMjEzNC00NDMzLThjMzEtNTM5NWNjNDEwOGRk/story_change/0/%22Hello%20Worldyeahyeah%22
