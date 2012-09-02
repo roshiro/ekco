@@ -6,9 +6,9 @@ env = 'DEV'
 
 if env == 'PROD':
 	FACEBOOK = {
-		'appId': '',
-		'appSecret': '',
-		'redirectUrl': ''
+		'appId': '455216557835008',
+		'appSecret': '1b3dbb5dd31891bf7aa248af6467643d',
+		'redirectUrl': 'http%3A%2F%2Fek-foto.co%2Ffacebookauth'
 	}
 else:
 	FACEBOOK = {
