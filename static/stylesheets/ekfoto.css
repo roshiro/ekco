@@ -27,13 +27,17 @@ a {text-decoration: none;}
 	margin-top: 50px;
 	text-shadow: 0px 1px 7px white; 
 }
+.main-home {padding-left: 23px;}
 .headline-landing span {
 	font-style: italic;
 	color: black;
 }
 #slogan-text {height: 350px; background-color: #F8F8F8;}
 #facebook-button {padding-top: 45px}
-div.logout {padding: 30px;}
+div.logout {margin: 25px; background-color: white; padding: 5px;}
+div.logout a {color: black;}
+
+.user-info {padding-left: 23px; margin-top: 20px}
 
 .fb-like-landing {
 	margin-left: 20px;
@@ -72,6 +76,25 @@ a.share-btn-open{font-family: Helvetica, Arial, sans-serif; font-size:11px;color
 	-moz-box-shadow: 0px 1px 6px #999;
 	-webkit-box-shadow: 0px 1px 6px #999;
 	box-shadow: 0px 1px 6px #999;
+}
+
+body span.messageholder {
+	-moz-transform: rotate(-45deg);
+	-webkit-transform: rotate(-45deg);
+	border: 1px solid transparent;
+	background-color: yellow;
+	color: #524D4D;
+	font-size: 13px;
+	font-weight: bold;
+	height: 22px;
+	left: -48px;
+	overflow: hidden;
+	padding-top: 3px;
+	position: absolute;
+	text-align: center;
+	top: 38px;
+	width: 198px;
+	z-index: 2;
 }
 
 .round {

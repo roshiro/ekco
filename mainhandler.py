@@ -90,7 +90,7 @@ class AuthFacebook(webapp.RequestHandler):
 				if session.is_active():
 					session.terminate()
 				session['profile'] = user
-				self.redirect('/user/' + user.username)
+				self.redirect('/home')
 			else:
 				logging.info('User not registered %s', token)
 				session = get_current_session()
@@ -172,15 +172,6 @@ class Logout(webapp.RequestHandler):
 		if session.is_active():
 			session.terminate()
 		self.redirect('/')
-
-class Login(webapp.RequestHandler):
-	def get(self):
-		if isLoggedIn():
-			user = getLoggedInUser()
-			self.redirect('/user/'+user.username)
-		else:
-			path = os.path.join(os.path.dirname(__file__) + '/templates/users', 'login.html')
-			self.response.out.write(template.render(path, {}))
 
 class ErrorPage():
 	def errorPage(self, response):

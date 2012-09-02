@@ -30,6 +30,7 @@
 	<script src="/js/modernizr-2.5.2.min.js"></script>
 </head>
 <body>
+	<span class="messageholder shadow">Aguarde versão Beta</span>
 	<!-- Facebook Like Button -->
 	<div id="fb-root"></div>
 	<script>(function(d, s, id) {
@@ -47,7 +48,7 @@
 		<div class="row" id="header">
 			<div class="span3"><a href="/"><img class="header-logo" src="/images/logo.png"></a></div>
 			{% if isLoggedIn %}
-				<div class="logout right" class="span9"><i class="icon-off"></i> <a href="/logout">Logout</a></div>
+				<div class="logout round right" class="span9"><i class="icon-off"></i> <a href="/logout">Logout</a></div>
 			{% else %}
 				<div class="span9"> </div>
 			{% endif %}
