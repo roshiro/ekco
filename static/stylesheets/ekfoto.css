@@ -37,7 +37,11 @@ a {text-decoration: none;}
 #facebook-button {padding-top: 45px}
 div.logout {margin: 25px; background-color: white; padding: 5px;}
 div.logout a {color: black;}
-
+div.arrow {
+	position: relative;
+	left: 56px;
+	top: -7px;	
+}
 .user-info {padding-left: 23px; margin-top: 20px}
 .second-headline {
 	font-family: 'Droid Serif', sans-serif;
