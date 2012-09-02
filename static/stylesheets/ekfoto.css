@@ -8,8 +8,9 @@ body {
 	background:white;
 	background-image:url('/images/background.jpg');
 	background-repeat:no-repeat;
-	background-attachment:fixed;
-	background-position:right;	
+	/*background-attachment:fixed;*/
+	background-top: 0px;
+	background-position:right top;	
 	font-family: sans-serif; 
 	color: #303030;
 }
@@ -31,17 +32,23 @@ a {text-decoration: none;}
 .headline-landing span {
 	font-style: italic;
 	color: black;
+	font-size: 1.1em;
+	text-shadow: 0px 0px 3px grey;
 }
-#slogan-text {height: 350px; background-color: #F8F8F8;}
+#slogan-text {height: 350px; margin-top: 35px; background-color: #F8F8F8;}
 #facebook-button {padding-top: 45px}
 div.logout {margin: 25px; background-color: white; padding: 5px;}
 div.logout a {color: black;}
 
 .user-info {padding-left: 23px; margin-top: 20px}
-
+.second-headline {
+	font-family: 'Droid Serif', sans-serif;
+	font-style: italic;
+}
 .fb-like-landing {
 	margin-left: 20px;
 	margin-top: 10px;
+	margin-bottom: 20px;
 }
 
 .date{font-family: Helvetica, Arial, sans-serif; font-size:11px;color:gray}
@@ -49,7 +56,7 @@ a.username{font-family: Helvetica, Arial, sans-serif; font-size:11px;color:#AF11
 a.username:hover{color:#333333}
 a.share-btn-open{font-family: Helvetica, Arial, sans-serif; font-size:11px;color:#08C;cursor:pointer;}
 .share-service-button .share-service-icon{
-	background-image: url(/images/share-icons.png);
+	background-image: url('/images/share-icons.png');
 	background-repeat: no-repeat;
 	width: 32px;
 	height: 32px;
@@ -107,6 +114,43 @@ body span.messageholder {
 .header-logo {
 	margin: 10px 0 10px 25px;
 }
+
+.separator-landing {
+	margin: 80px 0;
+	color: lightgrey;
+}
+
+.steps {
+	position: relative;
+	height: 200px;
+	margin: 50px 0;
+}
+.steps .step1 {
+	position: relative;
+	background: url('/images/sprite-steps.png') no-repeat -115px 0;	
+	width: 82px;
+	height: 91px;	
+}
+.steps .step2 {
+	position: relative;
+	margin-top: 10px;
+	background: url('/images/sprite-steps.png') no-repeat -230px -3px;	
+	width: 83px;
+	height: 81px;
+}
+.steps .step3 {
+	position: relative;
+	margin-top: 10px;	
+	background: url('/images/sprite-steps.png') no-repeat 0 -2px;	
+	width: 83px;
+	height: 81px;
+}
+
+.steps h3.orange {color: #F60;}
+.steps h3.pink {color: #F69;}
+.steps h3.blue {color: #06C;}
+
+
 input, textarea {-moz-border-radius:3px;-khtml-border-radius:3px;-webkit-border-radius:3px;border-radius:3px; padding:7px; font-size:14px;}
 ul {list-style-type: none;}
 li {list-style-type: none;}
