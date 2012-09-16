@@ -42,6 +42,11 @@ class Home(webapp.RequestHandler):
 			path = os.path.join(os.path.dirname(__file__) + '/templates', 'home.html')
 			self.response.out.write(template.render(path, {'isLoggedIn': isLoggedIn(), 'loggedInUser': user}))
 
+class HomePage(webapp.RequestHandler):
+	def get(self):
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'homepage.html')
+		self.response.out.write(template.render(path, {}))
+
 class LandingPage(webapp.RequestHandler):
 	def get(self):
 		if isLoggedIn():
@@ -148,6 +153,12 @@ class AuthUser(webapp.RequestHandler):
 			self.response.headers['Content-Type'] = 'application/json'
 			self.response.out.write(simplejson.dumps({'status': result['status']}))			
 
+class Prototype(webapp.RequestHandler):
+	def get(self):
+		template_values = {}
+		path = os.path.join(os.path.dirname(__file__) + '/templates', 'prototype.html')
+		self.response.out.write(template.render(path, template_values))
+
 class UserExists(webapp.RequestHandler):
 	def get(self, username):
 		user = userService.get(username)
@@ -166,6 +177,24 @@ class EmailExists(webapp.RequestHandler):
 		self.response.headers['Content-Type'] = 'application/json'
 		self.response.out.write(simplejson.dumps({'emailExist': emailExist}))
 
+class SignupPage(webapp.RequestHandler):
+	def get(self):
+		template_values = {}		
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'signup_1.html')	
+		self.response.out.write(template.render(path, template_values))
+
+class SignupThanksPage(webapp.RequestHandler):
+	def get(self):
+		template_values = {}		
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'signup_2.html')	
+		self.response.out.write(template.render(path, template_values))		
+
+class ProfilePage(webapp.RequestHandler):
+	def get(self, username):
+		template_values = {}		
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'profile.html')	
+		self.response.out.write(template.render(path, template_values))		
+
 class Logout(webapp.RequestHandler):
 	def get(self):
 		session = get_current_session()
@@ -182,8 +211,13 @@ class ErrorPage():
 application = webapp.WSGIApplication([
 									   	('/', LandingPage),
 										('/home', Home),
+										('/homepage', HomePage),
 										('/logout', Logout),
-										('/facebookauth', AuthFacebook)
+										('/facebookauth', AuthFacebook),
+										('/prototype', Prototype),
+										('/signup', SignupPage),
+										('/signup/confirmation', SignupThanksPage),
+										('/photos/([^/]+)?', ProfilePage)
 									 ], debug=True)
 
 def main():

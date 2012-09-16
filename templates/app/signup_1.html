@@ -1,0 +1,32 @@
+{% extends "_base.html" %}
+
+{% block title %}
+	<title>Faça parte do Ek Foto agora!</title>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="span12">
+		<center>
+		<h2>Se você é fotógrafo, faça parte do Ek Foto agora!</h2>
+		<div>Colocar aqui algumas vantagens e umas imagens que convençam o fotografo a se cadastrar</div>
+		</center>
+	</div>
+	<div class="span12">
+		<div id="facebook-button">
+			<center>			
+			<a id="btn-login-facebook" class="facebook-login-button serveFacebook" href="https://www.facebook.com/dialog/oauth?client_id={{ faceAppId }}&redirect_uri={{ faceRedirectUrl }}&scope=email,user_location&state=landingpage">
+				<div id="serveFacebook" class="serveFacebook-fill">
+				  <img alt="Servefacebook" src="/images/serveFacebook.png">
+				  <h1><b>Conecte-se</b> com <b>Facebook</b></h1>
+				</div>
+				<img id="Servefacebook_loader" alt="Servefacebook_loader" class="serveLoading serveLoading-Facebook" src="/images/serveFacebook_loader.gif" style="display:none">
+			</a>
+			</center>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block extrascripts %}
+{% endblock %}
