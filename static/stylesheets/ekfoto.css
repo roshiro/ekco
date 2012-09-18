@@ -80,7 +80,17 @@ a {text-decoration: none;}
 	font-style: oblique;
 	font-size: 20px;
 }
-	
+
+/*
+	Profile Page
+*/
+.btn-contact-me {margin-top: 15px;}
+.profile-photo-wrapper {padding-top: 15px;}
+.portfolio-wrapper {margin-top: 40px;}
+.portfolio-wrapper .title {font-size: 25px; font-weight: 300; margin: 5px 0 25px 0; text-align: center;}
+.portfolio-wrapper .crop { width: 660px; height: 174px; overflow: hidden; position: relative;}
+.portfolio-wrapper .crop img {width: 100%; margin-top: -10%;}
+.portfolio-wrapper .thumbnail {border: none;}
 body.home,
 body.app {
 	font-family: 'Open Sans', sans-serif;
@@ -88,6 +98,15 @@ body.app {
 	background-image:url('/images/background-gradient.png');
 	background-repeat:repeat-x;
 	background-top: 0px;
+}
+.header-logo, .home .header-logo {margin: 10px 0 10px 25px;}
+.app .header-logo {margin: 10px 0 10px 0px; width: 110px;}
+.home .top-slogan {
+	background-image:url('/images/top-slogan.png');
+	background-repeat:no-repeat;
+	background-color: transparent;
+	margin-top: 25px;
+	height: 50px;
 }
 
 #content {width: 960px; margin: auto;}
@@ -113,13 +132,6 @@ body.app {
 }
 #photo-type-search {
 	height: 35px;
-}
-.top-slogan {
-	background-image:url('/images/top-slogan.png');
-	background-repeat:no-repeat;
-	background-color: transparent;
-	margin-top: 25px;
-	height: 50px;
 }
 .headline-2 {
 	background-image:url('/images/headline-2.png');
@@ -147,6 +159,8 @@ div.arrow {
 	position: relative;
 	left: 56px;
 	top: -7px;	
+	height: 50px;
+	width: 503px;	
 }
 .user-info {padding-left: 23px; margin-top: 20px}
 .second-headline {
@@ -217,10 +231,6 @@ body span.messageholder {
 	-webkit-border-radius: 5px;
 	border-radius: 5px; /* future proofing */
 	-khtml-border-radius: 5px; /* for old Konqueror browsers */
-}
-
-.header-logo {
-	margin: 10px 0 10px 25px;
 }
 
 .separator-landing {

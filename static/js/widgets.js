@@ -215,8 +215,16 @@ var __s = myapp,
 
 /* Init pages */
 (function () {
+	var _handleClasses = function(isHome) {
+		if(isHome) 
+			$('body').addClass('home').removeClass('app');
+		else
+			$('body').addClass('app').removeClass('home');
+	};
+	
 	myapp.init =  {
 		homePage: function() {
+			_handleClasses(true);
 			$('.crop-small-main, .crop-2-vertical').hover(
 				function() {
 					$(this).find('.overlay-black').slideDown("slow");
@@ -227,6 +235,17 @@ var __s = myapp,
 					});
 				}
 			);
+		},
+		
+		signupConfirmartion: function() {
+			_handleClasses(false);
+			$('.btn-confirm-signup').click(function() {
+				window.location.href="/photos/rafael";
+			});
+		},
+		
+		profilePage: function() {
+			_handleClasses(false);
 		}
 	}
 })();
