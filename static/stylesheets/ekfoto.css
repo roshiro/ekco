@@ -22,6 +22,37 @@ h1, h2, h3, h4, h5 {margin: 4px 0; padding: 0;font-style: normal;color: #303030;
 a {text-decoration: none;}
 .text-justify {text-align: justify;}
 
+.feedback {
+	background: url('/images/sprite.png') no-repeat -6px -6px;
+	width: 38px;
+	height: 110px;
+	position: absolute;
+	left: 0px;
+	top: 58%;
+	cursor: pointer;
+}
+.feedback:hover {
+	background: url('/images/sprite.png') no-repeat -47px -7px;
+	width: 38px;
+	height: 110px;
+}
+.non-logged .photographer-tab {
+	background: url('/images/sprite.png') no-repeat -99px -11px;
+	width: 135px;
+	height: 23px;
+	position: fixed;
+	float: right;
+	top: 0;
+	cursor: pointer;
+	right: 0;	
+}
+.non-logged .photographer-tab:hover {
+	background: url('/images/sprite.png') no-repeat -99px -40px;
+	width: 135px;
+	height: 41px;
+}
+
+.photographer-tab:hover
 /* Styles for photo handling on home page */
 .column-photos-1 {margin-right: 6px;}
 .crop-small-main { width: 468px; height: 294px; margin: 0 6px 13px 0; overflow: hidden; position: relative;}
@@ -91,6 +122,8 @@ a {text-decoration: none;}
 .portfolio-wrapper .crop { width: 660px; height: 174px; overflow: hidden; position: relative;}
 .portfolio-wrapper .crop img {width: 100%; margin-top: -10%;}
 .portfolio-wrapper .thumbnail {border: none;}
+#contactModal .name {color: darkcyan;}
+
 body.home,
 body.app {
 	font-family: 'Open Sans', sans-serif;
@@ -108,6 +141,17 @@ body.app {
 	margin-top: 25px;
 	height: 50px;
 }
+
+/*
+	Search Page
+*/
+.search-label-wrapper {margin-bottom: 20px;}
+.search-listing  {border-bottom: 1px dashed lightGrey; padding: 15px 0 15px 14px;}
+.search-listing:hover {background-color: lightyellow; }
+.search-listing img {position: relative; width: 70px;}
+.search-listing .name {font-weight: bold; font-size: 22px;}
+.search-listing .desc {font-style: italic; font-family: serif; font-size: 15px; color: grey;}
+.search-listing .location {color: grey; font-size: 12px; font-weight: normal;}
 
 #content {width: 960px; margin: auto;}
 

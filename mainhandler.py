@@ -195,6 +195,11 @@ class ProfilePage(webapp.RequestHandler):
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'profile.html')	
 		self.response.out.write(template.render(path, template_values))		
 
+class SearchPage(webapp.RequestHandler):
+	def get(self):
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'search.html')	
+		self.response.out.write(template.render(path, {}))				
+
 class Logout(webapp.RequestHandler):
 	def get(self):
 		session = get_current_session()
@@ -212,6 +217,7 @@ application = webapp.WSGIApplication([
 									   	('/', LandingPage),
 										('/home', Home),
 										('/homepage', HomePage),
+										('/search', SearchPage),
 										('/logout', Logout),
 										('/facebookauth', AuthFacebook),
 										('/prototype', Prototype),

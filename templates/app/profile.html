@@ -8,7 +8,7 @@
 <div class="row user-details">
 	<div class="span2 profile-photo-wrapper">
 		<img src="https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-snc7/422078_10150636896899334_198408894_n.jpg" class="img-polaroid" width="100px">
-		<button class="btn btn-large btn btn-warning btn-contact-me" type="button">Contato  <i class="icon-white icon-comment"></i></button>
+		<button class="btn btn-large btn btn-warning btn-contact-me" data-toggle="modal" data-target="#contactModal" type="button">Contato  <i class="icon-white icon-comment"></i></button>
 	</div>
 	<div class="span6">
 		<h3><i>Rafael Oshiro</i></h3>
@@ -48,6 +48,18 @@
 			</li>
 		</ul>
 	</div>
+</div>
+
+<div id="contactModal" class="modal hide fade">
+  <div class="modal-body">
+	<h2 class="name">Rafael Oshiro</h2>
+	<p><i class="icon-envelope"></i> rafael.oshiro@ek-foto.co</p>
+	<p><i class="icon-map-marker"></i> Av. Conselheiro Carrão, 1233 - Vila Carrão, São Paulo, SP</p>
+	<p><i class="icon-bell"></i> +11 1984-3233</p>
+	<p>
+		<button class="btn btn-inverse btn-small close-modal" type="button">Fechar</button>
+	</p>
+  </div>
 </div>
 <!--
 - Mensagem de como iniciar para primeiro acesso

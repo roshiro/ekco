@@ -215,7 +215,13 @@ var __s = myapp,
 
 /* Init pages */
 (function () {
-	var _handleClasses = function(isHome) {
+	var _initAll = function() {
+		$('.close-modal').click(function() {
+			$('.modal').modal('hide');
+		});
+	},
+	
+	_handleClasses = function(isHome) {
 		if(isHome) 
 			$('body').addClass('home').removeClass('app');
 		else
@@ -224,6 +230,7 @@ var __s = myapp,
 	
 	myapp.init =  {
 		homePage: function() {
+			_initAll();
 			_handleClasses(true);
 			$('.crop-small-main, .crop-2-vertical').hover(
 				function() {
@@ -235,9 +242,16 @@ var __s = myapp,
 					});
 				}
 			);
+			$('#btn-search-home').click(function() {
+				window.location.href="/search";
+			});
+			$('.view-gallery-link').click(function() {
+				window.location.href="/photos/rafael";
+			});
 		},
 		
 		signupConfirmartion: function() {
+			_initAll();
 			_handleClasses(false);
 			$('.btn-confirm-signup').click(function() {
 				window.location.href="/photos/rafael";
@@ -245,6 +259,12 @@ var __s = myapp,
 		},
 		
 		profilePage: function() {
+			_initAll();
+			_handleClasses(false);
+		},
+		
+		searchPage: function() {
+			_initAll();
 			_handleClasses(false);
 		}
 	}
