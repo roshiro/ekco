@@ -11,11 +11,32 @@
 		<button class="btn btn-large btn btn-warning btn-contact-me" data-toggle="modal" data-target="#contactModal" type="button">Contato  <i class="icon-white icon-comment"></i></button>
 	</div>
 	<div class="span6">
-		<h3><i>Rafael Oshiro</i></h3>
-		<p class="description">Fotógrafo profissional com mais de 10 anos de experiência em fotografia de casamento e gestantes.</p>
-		<p class="specialities"><i class="icon-camera"></i> <span class="label label-info">Casamento</span> <span class="label label-info">Gestantes</span> <span class="label label-info">Moda</span></p>
-		<p class="location"><i class="icon-map-marker"></i> São Paulo, SP</p>
-		<p class="website"><i class="icon-globe"></i> <a href="http://www.oshiwall.com/" target="_blank">http://www.oshiwall.com/</a></p>
+		<h3 class="editable"><i>{{ user.name }}</i></h3>
+		<p class="description editable">
+			{% if user.about %}
+				{{ user.about }}
+			{% else %}
+				<small>Um pouco sobre você aqui...</small>
+			{% endif %}
+		</p>
+		<p class="specialities editable">
+			<i class="icon-camera"></i> 
+			{% if categories %}
+				<span class="label label-info">Casamento</span> 
+				<span class="label label-info">Gestantes</span> 
+				<span class="label label-info">Moda</span>
+			{% else %}
+				<small>Adicione suas especialidades</small>
+			{% endif %}
+		</p>
+		<p class="location editable"><i class="icon-map-marker"></i> {{ user.location }}</p>
+		<p class="website editable"><i class="icon-globe"></i> 
+			{% if user.website %}
+				<a href="http://www.oshiwall.com/" target="_blank">{{ user.website }}</a>
+			{% else %}
+				<small>Seu website aqui...</small>
+			{% endif %}
+		</p>
 	</div>
 </div>
 <div class="show-grid portfolio-wrapper">
@@ -52,8 +73,8 @@
 
 <div id="contactModal" class="modal hide fade">
   <div class="modal-body">
-	<h2 class="name">Rafael Oshiro</h2>
-	<p><i class="icon-envelope"></i> rafael.oshiro@ek-foto.co</p>
+	<h2 class="name">{{ user.name }}</h2>
+	<p><i class="icon-envelope"></i> {{ user.email }}</p>
 	<p><i class="icon-map-marker"></i> Av. Conselheiro Carrão, 1233 - Vila Carrão, São Paulo, SP</p>
 	<p><i class="icon-bell"></i> +11 1984-3233</p>
 	<p>

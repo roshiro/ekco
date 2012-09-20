@@ -14,7 +14,6 @@ var __s = myapp,
 	__Init = myapp.init,
 	__Pusher;
 
-
 /* Topic */
 (function() {
 	var topics = {};
@@ -89,7 +88,7 @@ var __s = myapp,
 
 	};
 	
-	__utils = {
+	__utils = myapp.utils = {
 		
 		getUrlParameter: _getUrlParameter,
 		
@@ -174,6 +173,10 @@ var __s = myapp,
 			return re.test(url);
 		},
 		
+		isLoggedIn: function() {
+			return _isLoggedIn;
+		},
+		
 		clearForm: _clearFormElements
 	};
 })();
@@ -250,6 +253,12 @@ var __s = myapp,
 			});
 		},
 		
+		signup1: function() {
+			_handleClasses(false);
+			$('.photographer-tab').css('display','none');
+			$('.feedback').css('display','none');
+		},
+		
 		signupConfirmartion: function() {
 			_initAll();
 			_handleClasses(false);
@@ -268,6 +277,10 @@ var __s = myapp,
 			_handleClasses(false);
 		}
 	}
+})();
+
+(function() {
+
 })();
 
 }());

@@ -5,17 +5,17 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-	<div class="span12">
+<div class="row show-grid">
+	<div class="span8 offset2">
 		<center>
-		<h2>Se você é fotógrafo, faça parte do Ek Foto agora!</h2>
+		<h2>Fotógrafo, faça parte do Ek Foto agora! Sem Pagar nada por isso.</h2>
 		<div>Colocar aqui algumas vantagens e umas imagens que convençam o fotografo a se cadastrar</div>
 		</center>
 	</div>
 	<div class="span12">
 		<div id="facebook-button">
 			<center>			
-			<a id="btn-login-facebook" class="facebook-login-button serveFacebook" href="https://www.facebook.com/dialog/oauth?client_id={{ faceAppId }}&redirect_uri={{ faceRedirectUrl }}&scope=email,user_location&state=landingpage">
+			<a id="btn-login-facebook" class="facebook-login-button serveFacebook" href="https://www.facebook.com/dialog/oauth?client_id={{ faceAppId }}&redirect_uri={{ faceRedirectUrl }}&scope=email,user_location&state=signup">
 				<div id="serveFacebook" class="serveFacebook-fill">
 				  <img alt="Servefacebook" src="/images/serveFacebook.png">
 				  <h1><b>Conecte-se</b> com <b>Facebook</b></h1>
@@ -29,4 +29,5 @@
 {% endblock %}
 
 {% block extrascripts %}
+<script>myapp.init.signup1();</script>
 {% endblock %}

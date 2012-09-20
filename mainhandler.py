@@ -44,8 +44,10 @@ class Home(webapp.RequestHandler):
 
 class HomePage(webapp.RequestHandler):
 	def get(self):
+		user = getLoggedInUser()		
+		template_values = {'isLoggedIn': isLoggedIn(), 'loggedInUser': user, 'faceAppId': FACEBOOK["appId"]}
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'homepage.html')
-		self.response.out.write(template.render(path, {}))
+		self.response.out.write(template.render(path, template_values))
 
 class LandingPage(webapp.RequestHandler):
 	def get(self):
@@ -95,7 +97,6 @@ class AuthFacebook(webapp.RequestHandler):
 				if session.is_active():
 					session.terminate()
 				session['profile'] = user
-				self.redirect('/home')
 			else:
 				logging.info('User not registered %s', token)
 				session = get_current_session()
@@ -106,7 +107,11 @@ class AuthFacebook(webapp.RequestHandler):
 				user = self.getUserJSON(faceuser, token)
 				user = userService.save(user)
 				session['profile'] = user
+			
+			if state == 'landingpage':
 				self.redirect('/home')
+			if state == 'signup':
+				self.redirect('/photos/' + user.username)
 		else:
 			logging.info('User declined authorization, error %s', error)
 		
@@ -179,7 +184,7 @@ class EmailExists(webapp.RequestHandler):
 
 class SignupPage(webapp.RequestHandler):
 	def get(self):
-		template_values = {}		
+		template_values = {'faceAppId': FACEBOOK["appId"], 'faceRedirectUrl': FACEBOOK["redirectUrl"]}
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'signup_1.html')	
 		self.response.out.write(template.render(path, template_values))
 
@@ -191,7 +196,9 @@ class SignupThanksPage(webapp.RequestHandler):
 
 class ProfilePage(webapp.RequestHandler):
 	def get(self, username):
-		template_values = {}		
+		loggedUser = getLoggedInUser()
+		user = userService.get(username)
+		template_values = {'isLoggedIn': isLoggedIn(), 'loggedInUser': loggedUser, 'user': user, 'faceAppId': FACEBOOK["appId"]}
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'profile.html')	
 		self.response.out.write(template.render(path, template_values))		
 

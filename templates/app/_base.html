@@ -27,10 +27,14 @@
 	{% endblock %}
 	<script src="/js/modernizr-2.5.2.min.js"></script>
 </head>
-<body class="home app non-logged">
+{% if loggedInUser %}
+	<body class="home app loggedIn">
+{% else %}
+	<body class="home app non-logged">
+{% endif %}
+
 	  <!-- Prompt IE 6 users to install Chrome Frame. -->
-	  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-	
+	  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->	
 	<div id="content" class="content">
 		<div class="row" id="header">
 			<div class="span3"><a href="/homepage"><img class="header-logo" src="/images/logo.png"></a></div>
@@ -38,7 +42,7 @@
 			{% if isLoggedIn %}
 				<div class="logout round right" class="span2"><i class="icon-off"></i> <a href="/logout">Logout</a></div>
 			{% else %}
-				<div class="span2"> </div>
+				<div class="span2"></div>
 			{% endif %}
 		</div>
 		<div class="row">
@@ -46,7 +50,7 @@
 			{% endblock %}
 		</div>
 		<div class="feedback" data-toggle="modal" data-target="#feedbackModal"></div>
-		<a href="#" onclick="alert('Versão em desenvolvimento. Aguarde.')"><div class="photographer-tab"></div></a>
+		<a href="/signup"><div class="photographer-tab shadow"></div></a>
 		<div id="feedbackModal" class="modal hide fade">
 		  <div class="modal-body">
 			<h2 class="name">Adoramos seu feedback!</h2>

@@ -179,21 +179,6 @@ class UserService():
 		url = '/user/' + short_username.replace(" ", "-")
 		return url
 
-	def getUserInfo(self, username):
-		userId = self.get(username).key().id()
-		stories = db.Query(Story, keys_only = True).filter('user = ', str(userId)).fetch(100)
-		contributions = db.Query(StoryPart, keys_only = True).filter('user = ', str(userId)).fetch(100)
-		logging.info('stories %s, contribs %s', stories, contributions)
-		return {
-			'followedBy': '', 
-			'followedByNum': 0,
-			'stories': stories, 
-			'storiesNum': len(stories),
-			'contributions': contributions, 
-			'contributionsNum': len(contributions), 			
-			'favoritesNum': 0
-		}
-
 class FacebookService():
 	def requestAccessToken(self, code):
 		url = "https://graph.facebook.com/oauth/access_token?client_id=" + FACEBOOK['appId'] + "&redirect_uri=" + FACEBOOK['redirectUrl'] + "&client_secret=" + FACEBOOK['appSecret'] + "&code=" + str(code)

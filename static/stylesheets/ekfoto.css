@@ -198,6 +198,7 @@ body.app {
 }
 
 div.logout {margin: 25px; background-color: white; padding: 5px;}
+.app div.logout {margin: 0;}
 div.logout a {color: black;}
 div.arrow {
 	position: relative;
