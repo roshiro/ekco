@@ -9,6 +9,7 @@ import urllib2
 from properties import *
 from models import *
 from service import *
+from google.appengine.api import files
 from django.utils import simplejson
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
@@ -17,6 +18,12 @@ from gaesessions import get_current_session
 from google.appengine.api import taskqueue
 from google.appengine.ext.db import Key
 from datetime import datetime, date, time
+
+try:
+    files.gs
+except AttributeError:
+    import gs
+    files.gs = gs
 
 userService = UserService()
 facebookService = FacebookService()
@@ -40,7 +47,7 @@ class Home(webapp.RequestHandler):
 		else:
 			user = getLoggedInUser()
 			path = os.path.join(os.path.dirname(__file__) + '/templates', 'home.html')
-			self.response.out.write(template.render(path, {'isLoggedIn': isLoggedIn(), 'loggedInUser': user}))
+			self.response.out.write(template.render(path, {'isLoggedIn': isLoggedIn(), 'loggedInUser': user, 'faceAppId': FACEBOOK["appId"]}))
 
 class HomePage(webapp.RequestHandler):
 	def get(self):
@@ -200,12 +207,60 @@ class ProfilePage(webapp.RequestHandler):
 		user = userService.get(username)
 		template_values = {'isLoggedIn': isLoggedIn(), 'loggedInUser': loggedUser, 'user': user, 'faceAppId': FACEBOOK["appId"]}
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'profile.html')	
-		self.response.out.write(template.render(path, template_values))		
+		self.response.out.write(template.render(path, template_values))
+
+class UpdateUser(webapp.RequestHandler):
+	def post(self):
+		userjson = self.request.get("user")
+		user = simplejson.loads(userjson)
+		user = userService.savePersonalInfo(user)
+		self.response.headers['Content-Type'] = 'application/json'
+		self.response.out.write(simplejson.dumps({'status': 'success', 'user': userService.getUserInJSON(user)}))
 
 class SearchPage(webapp.RequestHandler):
 	def get(self):
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'search.html')	
 		self.response.out.write(template.render(path, {}))				
+
+class GetUser(webapp.RequestHandler):
+	def get(self):
+		user = getLoggedInUser()
+		user = userService.getByEmail(user.email)
+		self.response.headers['Content-Type'] = 'application/json'
+		self.response.out.write(simplejson.dumps({'status': 'success', 'user': userService.getUserInJSON(user)}))
+
+class UploadHandler(webapp.RequestHandler):
+    READ_PATH = '/gs/ekfotoapp/'
+
+    def get(self):
+		filename = self.request.get('filename')
+		message = self.request.get('message')
+		
+		writable_file_name = files.gs.create(filename=self.READ_PATH + '/' + filename, acl='public-read', mime_type='text/html', cache_control='no-cache')
+		with files.open(writable_file_name, 'a') as f:
+		    f.write(message)
+		files.finalize(writable_file_name)
+		
+		'''
+		i = Image()
+		i.img = db.Blob(image)
+		i.put()		
+
+		self.response.headers['Content-Type'] = 'application/json'
+		self.response.out.write(simplejson.dumps({'status': 'success', 'photoId': i.key().id()}))'''
+		return
+
+class ReadFile(webapp.RequestHandler):
+	READ_PATH = '/gs/ekfotoapp/'
+	def get(self):
+		filename = self.request.get('filename')
+		print 'Opening file', filename
+		with files.open(self.READ_PATH+'/'+filename, 'r') as f:
+		    data = f.read(1000)
+		    while data:
+		        print data
+		        data = f.read(1000)
+		return
 
 class Logout(webapp.RequestHandler):
 	def get(self):
@@ -230,7 +285,11 @@ application = webapp.WSGIApplication([
 										('/prototype', Prototype),
 										('/signup', SignupPage),
 										('/signup/confirmation', SignupThanksPage),
-										('/photos/([^/]+)?', ProfilePage)
+										('/photos/([^/]+)?', ProfilePage),
+										('/user/update', UpdateUser),
+										('/getuser', GetUser),
+										('/upload', UploadHandler),
+										('/read', ReadFile)
 									 ], debug=True)
 
 def main():

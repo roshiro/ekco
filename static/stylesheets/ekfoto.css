@@ -21,36 +21,42 @@ body.app {
 h1, h2, h3, h4, h5 {margin: 4px 0; padding: 0;font-style: normal;color: #303030;}
 a {text-decoration: none;}
 .text-justify {text-align: justify;}
-
+button.btn-link {color: #505050;}
+.twitter-icon {
+	background: url('/images/sprite.png') no-repeat -243px -8px;
+	width: 25px;
+	height: 24px;
+}
+.facebook-icon {
+	background: url('/images/sprite.png') no-repeat -245px -54px;
+	width: 24px;
+	height: 24px;
+}
+.pinterest-icon {
+	background: url('/images/sprite.png') no-repeat -244px -99px;
+	width: 25px;
+	height: 25px;
+}
 .feedback {
-	background: url('/images/sprite.png') no-repeat -6px -6px;
-	width: 38px;
-	height: 110px;
+	background: url('/images/sprite.png') no-repeat -5px -7px;
+	width: 40px;
+	height: 136px;
 	position: absolute;
-	left: 0px;
-	top: 58%;
+	right: 0px;
+	top: 50%;
 	cursor: pointer;
 }
 .feedback:hover {
-	background: url('/images/sprite.png') no-repeat -47px -7px;
-	width: 38px;
-	height: 110px;
+	background: url('/images/sprite.png') no-repeat -51px -7px;
+	width: 40px;
+	height: 136px;
 }
-.non-logged .photographer-tab {
-	background: url('/images/sprite.png') no-repeat -99px -11px;
-	width: 135px;
-	height: 23px;
-	position: fixed;
-	float: right;
-	top: 0;
-	cursor: pointer;
-	right: 0;	
+.non-logged .signup-link a {
+	color: darkGoldenrod;
+	font-size: 12px;
+	padding: 5px;
 }
-.non-logged .photographer-tab:hover {
-	background: url('/images/sprite.png') no-repeat -99px -40px;
-	width: 135px;
-	height: 41px;
-}
+.non-logged .signup-link a:visited {color: darkGoldenrod;}
 
 .photographer-tab:hover
 /* Styles for photo handling on home page */
@@ -59,6 +65,18 @@ a {text-decoration: none;}
 .crop-small-main img { width: 100%; }
 .crop-2-vertical { width: 459px; height: 602px; margin-bottom: 6px; overflow: hidden; position: relative;}
 .crop-2-vertical img { width: 459px; height: 604px;}
+
+.bottom-bar {
+	background-color: #F0F0F0;
+	z-index: 999;
+	position: absolute;
+	width: 100%;
+	float: right;
+	bottom: 0;
+	padding: 5px;
+	font-size: 12px;
+	color: #787878;
+}
 
 .crop-small-main .photo-footer,
 .crop-2-vertical .photo-footer {
@@ -70,19 +88,15 @@ a {text-decoration: none;}
 	font-size: 11px;
 	cursor: pointer;
 }
-.crop-small-main .photo-footer .view-gallery-link:hover,
-.crop-2-vertical .photo-footer .view-gallery-link:hover {
-	background-color: lightgoldenrodyellow
-}
-.view-gallery-link {background-color: white; padding: 5px;}
-.view-gallery-link span {font-weight: bold; font-style: oblique; color: red; cursor: pointer;}
+.view-gallery-link {padding: 5px; color: white;}
+.view-gallery-link span {font-weight: bold; font-style: oblique; cursor: pointer;}
 .crop-highlights {width: 453px; height: 245px; overflow: hidden; position: relative;}
 .crop-highlights img { width: 100%; }
 .overlay-black {
 	background-image:url('/images/black-alpha.png');
 	background-repeat: repeat;
 	width: 100%;
-	height: 100%;
+	height: 100px;
 	z-index: 3;
 	position: absolute;
 	display: none;
@@ -122,11 +136,36 @@ a {text-decoration: none;}
 .portfolio-wrapper .crop { width: 660px; height: 174px; overflow: hidden; position: relative;}
 .portfolio-wrapper .crop img {width: 100%; margin-top: -10%;}
 .portfolio-wrapper .thumbnail {border: none;}
+.portfolio-wrapper .controls {
+	height: 20px;
+	margin-left: 4px;
+}
+.portfolio-wrapper .controls span {text-align: center;}
+.create-portfolio-wrapper {padding-top: 30px;}
+.upload-area {border: 1px dashed lightgrey; padding: 5px; background-color: lightyellow; text-align: center;}
+.fileinput-button {position: relative; overflow: hidden;}
+.fileinput-button .hidden-file-input {position: absolute; opacity: 0; top: 0; border-width: 0 0 100px 200px; cursor: pointer; margin: 0; right: 0;}
 #contactModal .name {color: darkcyan;}
+#portfolioModal {display: none; width: 500px; height: 450px;}
+#portfolioModal .img-list {margin: 10px 0; min-height: 355px;}
+#portfolioModal .img-preview-wrapper {padding: 5px 0; margin-left: 5px; border-bottom: 1px solid lightGrey;}
+#user-edit-link {position: absolute; right: 0;}
+
+.location-wrapper {
+	background-color: white;
+	padding: 10px;
+	font-size: 12px;
+	text-align: center;
+}
+.map-wrapper {
+	padding-bottom: 10px;
+}
+
+.user-info {position: relative;}
 
 body.home,
 body.app {
-	font-family: 'Open Sans', sans-serif;
+	font-family: Helvetica, Arial, serif;
 	font-weight: 400;
 	background-image:url('/images/background-gradient.png');
 	background-repeat:repeat-x;
@@ -150,8 +189,9 @@ body.app {
 .search-listing:hover {background-color: lightyellow; }
 .search-listing img {position: relative; width: 70px;}
 .search-listing .name {font-weight: bold; font-size: 22px;}
-.search-listing .desc {font-style: italic; font-family: serif; font-size: 15px; color: grey;}
+.search-listing .desc {font-style: italic; font-size: 12px; color: grey;}
 .search-listing .location {color: grey; font-size: 12px; font-weight: normal;}
+.more-info {font-size:12px; color: grey; margin-top: 10px;}
 
 #content {width: 960px; margin: auto;}
 
@@ -172,10 +212,15 @@ body.app {
 }
 #region-search {
 	width: 150px;
-	height: 35px;
 }
 #photo-type-search {
-	height: 35px;
+}
+.see-portfolio-btn {
+	position: absolute;
+	background-color: red;
+	color: white;
+	padding: 10px;
+	width: 96px;
 }
 .headline-2 {
 	background-image:url('/images/headline-2.png');
@@ -207,7 +252,6 @@ div.arrow {
 	height: 50px;
 	width: 503px;	
 }
-.user-info {padding-left: 23px; margin-top: 20px}
 .second-headline {
 	font-family: 'Droid Serif', sans-serif;
 	font-style: italic;
@@ -247,9 +291,9 @@ a.share-btn-open{font-family: Helvetica, Arial, sans-serif; font-size:11px;color
 	box-shadow: 1px -2px 8px #888;
 }
 .shadow {
-	-moz-box-shadow: 0px 1px 6px #999;
-	-webkit-box-shadow: 0px 1px 6px #999;
-	box-shadow: 0px 1px 6px #999;
+	-moz-box-shadow: 1px 3px 4px #D8D8D8;
+	-webkit-box-shadow: 1px 3px 4px #D8D8D8;
+	box-shadow: 1px 3px 4px #D8D8D8;
 }
 
 body span.messageholder {
@@ -272,10 +316,10 @@ body span.messageholder {
 }
 
 .round {
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px; /* future proofing */
-	-khtml-border-radius: 5px; /* for old Konqueror browsers */
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px; /* future proofing */
+	-khtml-border-radius: 8px; /* for old Konqueror browsers */
 }
 
 .separator-landing {

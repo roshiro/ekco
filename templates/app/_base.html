@@ -34,7 +34,28 @@
 {% endif %}
 
 	  <!-- Prompt IE 6 users to install Chrome Frame. -->
-	  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->	
+	  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '{{ faceAppId }}', // App ID
+          channelUrl : '/channel.html', // Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
+        // Additional initialization code here
+      };
+      // Load the SDK Asynchronously
+      (function(d){
+         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         ref.parentNode.insertBefore(js, ref);
+       }(document));
+    </script>
+	
 	<div id="content" class="content">
 		<div class="row" id="header">
 			<div class="span3"><a href="/homepage"><img class="header-logo" src="/images/logo.png"></a></div>
@@ -42,7 +63,7 @@
 			{% if isLoggedIn %}
 				<div class="logout round right" class="span2"><i class="icon-off"></i> <a href="/logout">Logout</a></div>
 			{% else %}
-				<div class="span2"></div>
+				<div class="span2"><div class="signup-link"><a href="/signup">Fotógrafo? Clique aqui!</a></div></div>
 			{% endif %}
 		</div>
 		<div class="row">
@@ -50,7 +71,6 @@
 			{% endblock %}
 		</div>
 		<div class="feedback" data-toggle="modal" data-target="#feedbackModal"></div>
-		<a href="/signup"><div class="photographer-tab shadow"></div></a>
 		<div id="feedbackModal" class="modal hide fade">
 		  <div class="modal-body">
 			<h2 class="name">Adoramos seu feedback!</h2>
@@ -84,6 +104,7 @@
 	<script>window.Mustache || document.write('<script src="/js/mustache.min.js"><\/script>')</script-->
 	
 	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/js/fileuploader.js"></script>
 	<script src="/js/widgets.js"></script>	
 	{% block extrascripts %}
 	

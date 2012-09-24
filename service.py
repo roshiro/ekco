@@ -76,6 +76,8 @@ class UserService():
 			user.username = obj['username']
 			user.about = ''
 			user.location = obj['location']
+			user.address = obj['address']
+			user.phone = obj['phone']
 			user.work = obj['work']
 			user.email = obj['email']
 			user.name = obj['name']
@@ -88,6 +90,8 @@ class UserService():
 					name=obj['name'],
 					location=obj['location'],
 					work=obj['work'],
+					phone='',
+					address='',
 					facetoken=obj['facetoken'],
 					faceid=obj['faceid'],
 					document_index_id='')
@@ -96,6 +100,17 @@ class UserService():
 				user.avatar_thumb = 'http://graph.facebook.com/'+ user.faceid +'/picture'
 			
 		user.put()
+		return user
+	
+	def savePersonalInfo(self, userUpdated):
+		user = self.getByEmail(userUpdated['email'])
+		user.about = userUpdated['about']
+		user.location = userUpdated['location']
+		user.phone = userUpdated['phone']
+		user.address = userUpdated['address']
+		user.name = userUpdated['name']
+		user.website = userUpdated['website']
+		user.save()
 		return user
 	
 	def updateFaceToken(self, username, token):
@@ -135,12 +150,13 @@ class UserService():
 				'name': user.name,
 				'username': user.username,
 				'email': user.email,
-				'password': user.password,
-				'url': self.getURL(user),
 				'avatar_thumb': user.avatar_thumb,
 				'location': user.location,
+				'address': user.address,
+				'phone': user.phone,
 				'website': user.website,
-				'about': user.about}
+				'about': user.about,
+				'categories': user.categories}
 
 	def getByEmail(self, email):
 		results = User.all().filter("email =", email).fetch(1)

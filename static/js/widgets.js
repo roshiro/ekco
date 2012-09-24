@@ -1,6 +1,6 @@
 ﻿/* Namespaces definition */
 var myapp = {};
-
+var user;
 /* 
  * Closure for cycleapp.
  */
@@ -8,11 +8,15 @@ var myapp = {};
 	myapp.utils = {};
 	myapp.widget = {};
 	myapp.init = {};	
+	myapp.handler = {};
 
 var __s = myapp,
 	__utils = myapp.utils,
 	__Init = myapp.init,
-	__Pusher;
+	__Services = myapp.services,
+	__Pusher,
+	_faceUserId,
+	_loggedInUser;
 
 /* Topic */
 (function() {
@@ -216,6 +220,66 @@ var __s = myapp,
 	}
 })(); 
 
+(function() {
+	
+	__Services = myapp.services = {
+		loadUser: function() {
+			$.get('/getuser', function(data) {
+				_loggedInUser = data.user;
+				window.user = _loggedInUser;				
+			});
+		}
+	}
+	
+})();
+
+(function() {
+	
+	var _createPreview = function(filename) {
+		var timestamp = new Date().getTime(),
+			elem = "<div class='img-preview-wrapper span12'>"+
+						"<img id="+timestamp+" class='img-preview' src='' />"+
+						"<span>"+filename+"</span>"+
+					"</div>";
+
+		return {
+			id: timestamp,
+			elem: elem
+		}
+
+	};
+	
+	myapp.handler = {
+		loadFile: function(input) {
+			if (input.files && input.files[0]) {
+				for(var i=0; i<input.files.length; i++) {
+					var reader = new FileReader();
+
+					reader.onload = function (e) {
+						var obj = _createPreview('test.jpg'),
+							img;
+
+						$('#img-list').append(obj.elem);
+
+						img = $("#" + obj.id);
+						img.attr('src', e.target.result);
+						setTimeout((function(img) {
+							if(parseInt(img.css('width')) > 100) {
+								img.css('width', '100px');
+							} else if(parseInt(img.attr('height')) > 100) {
+								img.css('height', '100px');
+							}					
+						})(img), 1000);
+					};
+
+					reader.readAsDataURL(input.files[i]);
+				}
+		    }	
+		}
+	}
+	
+})();
+
 /* Init pages */
 (function () {
 	var _initAll = function() {
@@ -270,6 +334,81 @@ var __s = myapp,
 		profilePage: function() {
 			_initAll();
 			_handleClasses(false);
+			
+			$('#btn-new-portfolio').click(function(event) {
+				event.stopPropagation();
+				$("#portfolioModal").modal();
+			});
+			
+			$('#img-list').delegate("button", "click", function() {
+				if($(this).hasClass('btn-delete')) {
+					var imgId = $(this).attr('imgid');
+					$('.img-wrapper-id-'+imgId).remove();
+				}
+			});
+			
+			$('.btn-contact-me').click(function(event) {
+				event.stopPropagation();
+				$("#contactModal").modal();
+				$('#contactModal .name').html(_loggedInUser.name);
+				$('#contactModal .email').html(_loggedInUser.email);
+				$('#contactModal .address').html(_loggedInUser.address);
+				$('#contactModal .phone').html(_loggedInUser.phone);
+			});
+			
+			$('#user-edit-link').click(function(event) {
+				event.stopPropagation();
+				$("#edit-profile").modal();
+				$('#inputName').attr('value', _loggedInUser.name);
+				$('#inputAbout').attr('value', _loggedInUser.about);
+				$('#inputPhone').attr('value', _loggedInUser.phone);
+				$('#inputAddress').attr('value', _loggedInUser.address);
+				$('#inputWebsite').attr('value', _loggedInUser.website);
+			});
+			
+			$('#save-profile').click(function() {
+				var name = $('#inputName').attr('value'),
+					about = $('#inputAbout').attr('value'),
+					phone = $('#inputPhone').attr('value'),
+					address = $('#inputAddress').attr('value'),
+					website = $('#inputWebsite').attr('value');
+				
+				if(!name || name == "" || !about || about == "") {
+					$('.alert-error').css('display', 'block');
+				} else {
+					_loggedInUser.name = name;
+					_loggedInUser.about = about;
+					_loggedInUser.phone = phone;
+					_loggedInUser.address = address;
+					_loggedInUser.website = website;
+					
+					$.post('/user/update', {'user': JSON.stringify(_loggedInUser)}, function(data) {
+						$('.modal').modal('hide');						
+						user = _loggedInUser = data.user;
+						$('#user-name').html(user.name);
+						$('#user-about').html(user.about);
+						if(user.website) {
+							var elems = "<i class='icon-globe'></i> <a id='user-website' href='"+user.webite+"' target='_blank'>"+user.website+"</a>";
+							$('.website').empty().append(elems);
+						} else {
+							$('#user-website').remove();
+						}
+					});
+				}
+				
+				$('#input-file').change(function(data) {
+					alert(data);
+		            if (input.files && input.files[0]) {
+						var reader = new FileReader();
+
+						reader.onload = function (e) {
+							$('#img-preview').attr('src', e.target.result).width(150).height(200);
+						};
+
+						reader.readAsDataURL(input.files[0]);
+		            }					
+				});	            
+			});			
 		},
 		
 		searchPage: function() {
@@ -280,6 +419,9 @@ var __s = myapp,
 })();
 
 (function() {
+
+	//_faceUserId = FB.getUserID();
+	__Services.loadUser();
 
 })();
 
