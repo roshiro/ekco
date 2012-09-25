@@ -5,7 +5,11 @@ import wsgiref.handlers
 import os
 import logging
 import urllib2
+import datetime
+import time
 
+from google.appengine.api import users
+from google.appengine.ext import db
 from properties import *
 from models import *
 from service import *
@@ -17,16 +21,13 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from gaesessions import get_current_session
 from google.appengine.api import taskqueue
 from google.appengine.ext.db import Key
-from datetime import datetime, date, time
 
-try:
-    files.gs
-except AttributeError:
-    import gs
-    files.gs = gs
+from google.appengine.ext import blobstore
+from google.appengine.ext.webapp import blobstore_handlers
 
 userService = UserService()
 facebookService = FacebookService()
+portfolioService = PortfolioService()
 
 def isLoggedIn():
 	session = get_current_session()
@@ -229,39 +230,6 @@ class GetUser(webapp.RequestHandler):
 		self.response.headers['Content-Type'] = 'application/json'
 		self.response.out.write(simplejson.dumps({'status': 'success', 'user': userService.getUserInJSON(user)}))
 
-class UploadHandler(webapp.RequestHandler):
-    READ_PATH = '/gs/ekfotoapp/'
-
-    def get(self):
-		filename = self.request.get('filename')
-		message = self.request.get('message')
-		
-		writable_file_name = files.gs.create(filename=self.READ_PATH + '/' + filename, acl='public-read', mime_type='text/html', cache_control='no-cache')
-		with files.open(writable_file_name, 'a') as f:
-		    f.write(message)
-		files.finalize(writable_file_name)
-		
-		'''
-		i = Image()
-		i.img = db.Blob(image)
-		i.put()		
-
-		self.response.headers['Content-Type'] = 'application/json'
-		self.response.out.write(simplejson.dumps({'status': 'success', 'photoId': i.key().id()}))'''
-		return
-
-class ReadFile(webapp.RequestHandler):
-	READ_PATH = '/gs/ekfotoapp/'
-	def get(self):
-		filename = self.request.get('filename')
-		print 'Opening file', filename
-		with files.open(self.READ_PATH+'/'+filename, 'r') as f:
-		    data = f.read(1000)
-		    while data:
-		        print data
-		        data = f.read(1000)
-		return
-
 class Logout(webapp.RequestHandler):
 	def get(self):
 		session = get_current_session()
@@ -274,6 +242,39 @@ class ErrorPage():
 		template_values = {}		
 		path = os.path.join(os.path.dirname(__file__), '404.html')	
 		response.out.write(template.render(path, template_values))
+
+class GenerateUploadUrl(webapp.RequestHandler):
+	def get(self, username):
+		upload_url = blobstore.create_upload_url('/upload', gs_bucket_name='ekfotoco/'+username)
+		self.response.headers['Content-Type'] = 'application/json'
+		self.response.out.write(simplejson.dumps({'status': 'success', 'url': upload_url}))		
+
+class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+	def post(self):
+		upload_files = self.get_uploads('file')
+		portfolio_id = self.request.get('portfolio_id')
+		blob_info = upload_files[0]
+		portfolioService.addPhotos(portfolio_id, [str(blob_info.key())])
+		self.response.headers['Content-Type'] = 'application/json'
+		self.response.out.write(simplejson.dumps({'status': 'success', 'blob_key': str(blob_info.key())}))
+
+class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
+	def get(self, resource):
+		resource = str(urllib.unquote(resource))
+		blob_info = blobstore.BlobInfo.get(resource)
+		self.send_blob(blob_info)
+		
+class NewPortfolio(webapp.RequestHandler):
+	def post(self):
+		name = self.request.get("name")
+		user = getLoggedInUser()
+		portfolio = {'id': 0, 'name': name}
+		portfolio = portfolioService.save(portfolio, user)
+		dic = portfolio.to_dict()
+		dic['id'] = portfolio.key().id()
+		logging.info('%s', dic)
+		self.response.headers['Content-Type'] = 'application/json'
+		self.response.out.write(simplejson.dumps({'status': 'success', 'portfolio': toJSON(portfolio) }))
 		
 application = webapp.WSGIApplication([
 									   	('/', LandingPage),
@@ -288,8 +289,10 @@ application = webapp.WSGIApplication([
 										('/photos/([^/]+)?', ProfilePage),
 										('/user/update', UpdateUser),
 										('/getuser', GetUser),
+										('/getuploadurl/([^/]+)?', GenerateUploadUrl),
 										('/upload', UploadHandler),
-										('/read', ReadFile)
+										('/serve/([^/]+)?', ServeHandler),
+										('/portfolio/new', NewPortfolio)
 									 ], debug=True)
 
 def main():

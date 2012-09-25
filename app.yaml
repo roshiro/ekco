@@ -25,6 +25,9 @@ handlers:
 - url: /queue/.*
   script: queueworker.py
 
+- url: /storage/.*
+  script: storage.py
+
 - url: /.*
   script: mainhandler.py
 

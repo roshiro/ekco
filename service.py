@@ -55,6 +55,34 @@ class Utils():
 				
 		return date.decode('utf8')
 
+class PortfolioService():
+	def save(self, obj, user):
+		if int(obj['id']) != 0:
+			p = Portfolio.get_by_id(int(obj['id']))
+			p.name = obj['name']
+			p.put()
+		else:
+			p = Portfolio(name=obj['name'], user=user)
+			p.put()
+		return p
+			
+	def delete(self, portfolio_id):
+		p = Portfolio.get_by_id(int(portfolio_id))
+		p.delete()
+		return
+		
+	def addPhotos(self, portfolio_id, blob_keys):
+		p = Portfolio.get_by_id(int(portfolio_id))
+		for index in blob_keys:
+			p.photos.append(index)
+		return p.put()
+		
+	def deletePhotos(self, portfolio_id, blob_keys):
+		p = Portfolio.get_by_id(int(portfolio_id))
+		for index in blob_keys:
+			p.photos.remove(index)
+		return p.put()
+
 class UserService():
 	def save(self, obj):
 		if not hasattr(obj, 'faceid') == False:

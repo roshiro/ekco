@@ -1,6 +1,7 @@
 ﻿/* Namespaces definition */
 var myapp = {};
 var user;
+var activePortfolio;
 /* 
  * Closure for cycleapp.
  */
@@ -237,42 +238,60 @@ var __s = myapp,
 	
 	var _createPreview = function(filename) {
 		var timestamp = new Date().getTime(),
-			elem = "<div class='img-preview-wrapper span12'>"+
-						"<img id="+timestamp+" class='img-preview' src='' />"+
-						"<span>"+filename+"</span>"+
+			elem = "<div class='img-preview-wrapper row img-wrapper-id-"+timestamp+"'>"+
+						"<div class='span1'><img id="+timestamp+" class='img-preview' src='' /></div>"+
+						"<div class='span4'>"+
+							"<i class='icon-file'></i> "+filename+
+							"<div class='progress progress-striped active'>"+
+								"<div class='bar' style='width: 0%;'></div>"+
+							"</div>"+
+						"</div>"+
+						"<div class='span2'><button imgid='"+timestamp+"' class='btn btn-link btn-delete'><i class='icon-trash'></i></button></div>"
 					"</div>";
 
 		return {
 			id: timestamp,
 			elem: elem
 		}
-
 	};
 	
 	myapp.handler = {
-		loadFile: function(input) {
+		loadFile: function() {
+			var input = $('#input-files-field')[0],
+				reader = new FileReader(),
+				file,
+				filename,
+				size,
+				type;
+				
 			if (input.files && input.files[0]) {
 				for(var i=0; i<input.files.length; i++) {
-					var reader = new FileReader();
+					reader = new FileReader(),
+					file = input.files[i],
+					filename = file.name,
+					size = file.size,
+					type = file.type;
 
-					reader.onload = function (e) {
-						var obj = _createPreview('test.jpg'),
-							img;
+					reader.onload = (function(theFile) {
+						return function (e) {
+							var obj = _createPreview(theFile.name),
+								img;
 
-						$('#img-list').append(obj.elem);
+							$('#img-list').append(obj.elem);
 
-						img = $("#" + obj.id);
-						img.attr('src', e.target.result);
-						setTimeout((function(img) {
-							if(parseInt(img.css('width')) > 100) {
-								img.css('width', '100px');
-							} else if(parseInt(img.attr('height')) > 100) {
-								img.css('height', '100px');
-							}					
-						})(img), 1000);
-					};
+							img = $("#" + obj.id);
+							img.attr('src', e.target.result);
+							setTimeout(function() {
+								if(parseInt(img.css('width')) > 100) {
+									img.css('width', '100px');
+								} else if(parseInt(img.attr('height')) > 100) {
+									img.css('height', '100px');
+								}					
+							}, 500);
 
-					reader.readAsDataURL(input.files[i]);
+						};
+					})(file);
+					reader.readAsDataURL(file);
 				}
 		    }	
 		}
@@ -293,6 +312,51 @@ var __s = myapp,
 			$('body').addClass('home').removeClass('app');
 		else
 			$('body').addClass('app').removeClass('home');
+	},
+	
+	_uploadFiles = function(files, portfolioId, url) {
+		var file = files[0],
+	    	xhr = new XMLHttpRequest(),
+			formData = new FormData();
+	    //xhr.file = file; // not necessary if you create scopes like this
+		formData.append('file', file);
+		formData.append('portfolio_id', portfolioId);
+		
+	    xhr.addEventListener('progress', function(e) {
+	        var done = e.position || e.loaded, total = e.totalSize || e.total,
+				percentage = (Math.floor(done/total*1000)/10);
+				
+	        console.log('xhr progress: ' + percentage + '%');
+	    }, false);
+	    if ( xhr.upload ) {
+	        xhr.upload.onprogress = function(e) {
+	            var done = e.position || e.loaded, 
+					total = e.totalSize || e.total;
+					
+	            console.log('xhr.upload progress: ' + done + ' / ' + total + ' = ' + (Math.floor(done/total*1000)/10) + '%');
+	        };
+	    }
+	    xhr.onreadystatechange = function(e) {
+			if ( 4 == this.readyState ) {
+				var obj = JSON.parse(xhr.responseText);
+			}
+	    };
+	    xhr.open('post', url, true);
+		xhr.send(formData);
+	},
+	
+	_getUploadURL = function(username) {
+		var result;
+		$.ajax({
+			url: '/getuploadurl/'+username,
+			type: 'GET',
+			dataType: 'json',
+			async: false,
+			success: function(data) {
+				result = data.url;
+			}
+		});
+		return result;
 	};
 	
 	myapp.init =  {
@@ -337,13 +401,40 @@ var __s = myapp,
 			
 			$('#btn-new-portfolio').click(function(event) {
 				event.stopPropagation();
-				$("#portfolioModal").modal();
+				activePortfolio = undefined;
+				$('#input-portfolio-name').attr('value', "");
+				$("#portfolioName").modal();
+			});
+			
+			$('#btn-save-porfolioname').click(function() {
+				var name = $('#input-portfolio-name').attr('value');
+				$.post('/portfolio/new', {'name': name}, function(data) {
+					if(data.status == "success") {
+						activePortfolio = JSON.parse(data.portfolio)[0];
+						$('.modal').modal('hide');
+						$('#portfolioModal').modal();
+						$('#portfolio-name-label').html(activePortfolio.name);
+					} else {
+						alert('Erro, por favor tente novamente.');
+					}
+				});
 			});
 			
 			$('#img-list').delegate("button", "click", function() {
 				if($(this).hasClass('btn-delete')) {
 					var imgId = $(this).attr('imgid');
 					$('.img-wrapper-id-'+imgId).remove();
+				}
+			});
+			
+			$('.btn-upload').click(function() {
+				var actionUrl = _getUploadURL(user.username),
+					files = $('#input-files-field')[0].files;
+					
+				if(files && files.length > 0) {
+					_uploadFiles(files, activePortfolio.id, actionUrl);	
+				} else {
+					alert('Selecione alguma foto para upload');
 				}
 			});
 			
@@ -388,27 +479,18 @@ var __s = myapp,
 						$('#user-name').html(user.name);
 						$('#user-about').html(user.about);
 						if(user.website) {
-							var elems = "<i class='icon-globe'></i> <a id='user-website' href='"+user.webite+"' target='_blank'>"+user.website+"</a>";
+							var elems = "<a id='user-website' href='"+user.webite+"' target='_blank'>"+user.website+"</a>";
 							$('.website').empty().append(elems);
 						} else {
 							$('#user-website').remove();
 						}
 					});
-				}
-				
-				$('#input-file').change(function(data) {
-					alert(data);
-		            if (input.files && input.files[0]) {
-						var reader = new FileReader();
-
-						reader.onload = function (e) {
-							$('#img-preview').attr('src', e.target.result).width(150).height(200);
-						};
-
-						reader.readAsDataURL(input.files[0]);
-		            }					
-				});	            
-			});			
+				}         
+			});	
+			
+			$('#input-files-field').change(function() {
+				myapp.handler.loadFile();
+			});					
 		},
 		
 		searchPage: function() {
