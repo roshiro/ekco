@@ -226,8 +226,10 @@ var __s = myapp,
 	__Services = myapp.services = {
 		loadUser: function() {
 			$.get('/getuser', function(data) {
-				_loggedInUser = data.user;
-				window.user = _loggedInUser;				
+				if(data.status == "success" && data.user) {
+					_loggedInUser = data.user;
+					window.user = _loggedInUser;
+				}
 			});
 		}
 	}
@@ -238,15 +240,15 @@ var __s = myapp,
 	
 	var _createPreview = function(filename) {
 		var timestamp = new Date().getTime(),
-			elem = "<div class='img-preview-wrapper row img-wrapper-id-"+timestamp+"'>"+
+			elem = "<div class='img-preview-wrapper row span6 img-wrapper-id-"+timestamp + " "+ filename +"'>"+
 						"<div class='span1'><img id="+timestamp+" class='img-preview' src='' /></div>"+
-						"<div class='span4'>"+
+						"<div class='span3'>"+
 							"<i class='icon-file'></i> "+filename+
 							"<div class='progress progress-striped active'>"+
 								"<div class='bar' style='width: 0%;'></div>"+
 							"</div>"+
 						"</div>"+
-						"<div class='span2'><button imgid='"+timestamp+"' class='btn btn-link btn-delete'><i class='icon-trash'></i></button></div>"
+						"<div class='span1'><button imgid='"+timestamp+"' filename='"+filename+"' class='btn btn-link btn-delete'><i class='icon-trash'></i></button></div>"
 					"</div>";
 
 		return {
@@ -281,6 +283,7 @@ var __s = myapp,
 
 							img = $("#" + obj.id);
 							img.attr('src', e.target.result);
+							img.attr('type', theFile.type);
 							setTimeout(function() {
 								if(parseInt(img.css('width')) > 100) {
 									img.css('width', '100px');
@@ -314,33 +317,57 @@ var __s = myapp,
 			$('body').addClass('app').removeClass('home');
 	},
 	
-	_uploadFiles = function(files, portfolioId, url) {
-		var file = files[0],
+	_dataURItoBlob = function(dataURI, type) {
+	    var binary = atob(dataURI.split(',')[1]);
+	    var array = [];
+	    for(var i = 0; i < binary.length; i++) {
+	        array.push(binary.charCodeAt(i));
+	    }
+	    return new Blob([new Uint8Array(array)], {type: type});
+	}
+	
+	_uploadFiles = function(imgId, files, portfolioId, url, type) {
+		var file = _dataURItoBlob(files[0], type),
 	    	xhr = new XMLHttpRequest(),
 			formData = new FormData();
 	    //xhr.file = file; // not necessary if you create scopes like this
 		formData.append('file', file);
 		formData.append('portfolio_id', portfolioId);
 		
-	    xhr.addEventListener('progress', function(e) {
-	        var done = e.position || e.loaded, total = e.totalSize || e.total,
-				percentage = (Math.floor(done/total*1000)/10);
+	    xhr.addEventListener('progress', (function(imgId) {
+			return function(e) {
+		        var done = e.position || e.loaded, total = e.totalSize || e.total,
+					percentage = (Math.floor(done/total*1000)/10);
 				
-	        console.log('xhr progress: ' + percentage + '%');
-	    }, false);
+				$('.img-wrapper-id-'+imgId+' .bar').css('width', percentage+'%');
+		        console.log('xhr progress: ' + percentage + '%');
+		    }})(imgId)
+		, false);
+	
 	    if ( xhr.upload ) {
-	        xhr.upload.onprogress = function(e) {
-	            var done = e.position || e.loaded, 
-					total = e.totalSize || e.total;
-					
-	            console.log('xhr.upload progress: ' + done + ' / ' + total + ' = ' + (Math.floor(done/total*1000)/10) + '%');
-	        };
+	        xhr.upload.onprogress = (function(imgId) {
+				return function(e) {
+		            var done = e.position || e.loaded, 
+						total = e.totalSize || e.total,
+						percentage = (Math.floor(done/total*1000)/10);
+						
+					$('.img-wrapper-id-'+imgId+' .bar').css('width', percentage+'%');
+		            console.log(imgId + ' xhr.upload progress: ' + done + ' / ' + total + ' = ' + (Math.floor(done/total*1000)/10) + '%');
+		    	};
+			})(imgId);
 	    }
-	    xhr.onreadystatechange = function(e) {
-			if ( 4 == this.readyState ) {
-				var obj = JSON.parse(xhr.responseText);
-			}
-	    };
+	    xhr.onreadystatechange = (function(imgId) {
+			return function(e) {
+				if ( 4 == this.readyState ) {
+					var obj = JSON.parse(xhr.responseText);
+					setTimeout(function() {
+						$('.img-wrapper-id-'+imgId+' .progress').removeClass('progress-striped active');	
+					}, 1000);
+				}
+		    };
+		})(imgId);
+		
+		$('button[imgid='+imgId+']').remove();
 	    xhr.open('post', url, true);
 		xhr.send(formData);
 	},
@@ -385,6 +412,7 @@ var __s = myapp,
 			_handleClasses(false);
 			$('.photographer-tab').css('display','none');
 			$('.feedback').css('display','none');
+			$('.controls-header').css('display','none');
 		},
 		
 		signupConfirmartion: function() {
@@ -422,17 +450,28 @@ var __s = myapp,
 			
 			$('#img-list').delegate("button", "click", function() {
 				if($(this).hasClass('btn-delete')) {
-					var imgId = $(this).attr('imgid');
+					var imgId = $(this).attr('imgid'),
+						filename = $(this).attr('filename'),
+						files = $('#input-files-field')[0].files;
+					
 					$('.img-wrapper-id-'+imgId).remove();
+					for(var i=0; i<files.length; i++) {
+						if(files[i].name == filename) {
+							
+						}
+					}
 				}
 			});
 			
 			$('.btn-upload').click(function() {
 				var actionUrl = _getUploadURL(user.username),
-					files = $('#input-files-field')[0].files;
+					imgElem = $('#img-list .img-preview')[0];
+					files = [imgElem.src],
+					imgId = $(imgElem).attr('id'),
+					mimetype = $(imgElem).attr('type');
 					
 				if(files && files.length > 0) {
-					_uploadFiles(files, activePortfolio.id, actionUrl);	
+					_uploadFiles(imgId, files, activePortfolio.id, actionUrl, mimetype);	
 				} else {
 					alert('Selecione alguma foto para upload');
 				}

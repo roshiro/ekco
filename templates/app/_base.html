@@ -22,7 +22,7 @@
 	<link rel="stylesheet" href="/stylesheets/style.css" type="text/css" />
 	<link rel="stylesheet" href="/stylesheets/ekfoto.css" type="text/css" />
 	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css" />
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600italic,300' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Cutive' rel='stylesheet' type='text/css'>
 	{% block extracss %}
 	{% endblock %}
 	<script src="/js/modernizr-2.5.2.min.js"></script>
@@ -58,13 +58,26 @@
 	
 	<div id="content" class="content">
 		<div class="row" id="header">
-			<div class="span3"><a href="/homepage"><img class="header-logo" src="/images/logo.png"></a></div>
-			<div class="span7 top-slogan"></div>
-			{% if isLoggedIn %}
-				<div class="logout round right" class="span2"><i class="icon-off"></i> <a href="/logout">Logout</a></div>
-			{% else %}
-				<div class="span2"><div class="signup-link"><a href="/signup">Fotógrafo? Clique aqui!</a></div></div>
-			{% endif %}
+			<div class="span2"><a href="/homepage"><img class="header-logo" src="/images/logo.png"></a></div>
+
+			<div class="span7 top-slogan">
+				{% block header-middle %}			
+				{% endblock %}
+			</div>
+			<div class="right" class="span2">
+				<!-- All the pages -->
+				<div class="controls-header">
+				{% if isLoggedIn %}			
+					<a href="/photos/{{ loggedInUser.username }}">Perfil</a>
+					<a href="/logout">Logout</a>
+				{% else %}
+					<div class="signup-link"><a href="/signup">Fotógrafo? Clique aqui!</a></div>
+				{% endif %}
+				</div>
+				
+				{% block header-right %}
+				{% endblock %}				
+			</div>
 		</div>
 		<div class="row">
 			{% block content %}

@@ -4,8 +4,27 @@
 	<title>Promova seu portfolio, aumente a visibilidade do seu trabalho e conquiste mais clientes - Ek Foto</title>
 {% endblock %}
 
+{% block header-middle %}
+	<img src="/images/top-slogan.png">
+{% endblock %}
+{% block header-right %}
+<!-- Just on homepage -->
+<div class="btn-group btn-small">
+	<a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#">
+		Procure por região
+		<span class="caret"></span>
+	</a>
+	<ul class="dropdown-menu">
+		<li><a href="#">SP</a></li>
+		<li><a href="#">RJ</a></li>
+		<li><a href="#">RS</a></li>
+		<li><a href="#">SC</a></li>				
+	</ul>
+</div>			
+{% endblock %}
+
 {% block content %}
-<div class="row show-grid" style="margin:auto;">
+<!--div class="row show-grid" style="margin:auto;">
 	<div id="main-search-bar" class="row">
 		<div id="search-region-wrapper" class="span3 offset1">
 			Região: <select id="region-search">
@@ -32,7 +51,7 @@
 </div>
 <div class="row">
 	<div class="separator offset4"></div>
-</div>
+</div-->
 <div class="row-fluid span12">
 	<div class="row-fluid span6 column-photos-1">
 		<div class="crop-small-main shadow">
@@ -42,10 +61,10 @@
 				</div>				
 			</div>			
 			<a href="#"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/wedding.jpg"></a>
-			<div class="label-overlay">
+			<!--div class="label-overlay">
 				<p class="title">Emoção</p>
 				<span>Confira nossa seleção de fotógrafos de casamento!</span>
-			</div>
+			</div-->
 			<div class="bottom-bar show-grid">
 				<i class="icon-star-empty"></i> foto por <i>Rafael Oshiro</i>
 				<i class="icon-tags offset1"></i> casamento
@@ -58,10 +77,10 @@
 				</div>				
 			</div>			
 			<a href="#"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/birthday.jpeg"/></a>
-			<div class="label-overlay">
+			<!--div class="label-overlay">
 				<p class="title">Sorrisos...</p>
 				<span>registre todos o momentos</span>
-			</div>
+			</div-->
 			<div class="bottom-bar show-grid">
 				<i class="icon-star-empty"></i> foto por <i>New Star</i>
 				<i class="icon-tags offset1"></i> aniversário
@@ -76,10 +95,10 @@
 				</div>				
 			</div>
 			<a href="#"><img src="http://commondatastorage.googleapis.com/ekfotoco/prototype/pregnancy.jpeg" class="img-rounded" /></a>
-			<div class="label-overlay">
+			<!--div class="label-overlay">
 				<p class="title">Momento Único</p>
 				<span>Um momento como esse deve ser registrado</span>
-			</div>	
+			</div-->	
 			<div class="bottom-bar show-grid">
 				<i class="icon-star-empty"></i> foto por <i>Normal Leal</i>
 				<i class="icon-tags offset1"></i> gestante
@@ -87,13 +106,8 @@
 		</div>
 	</div>	
 </div>
-
-<div class="row show-grid">
-	<div class="span7 offset5 headline-2"></div>
-</div>
 <div class="show-grid">
 	<div class="span6 highlight">
-		<span>Moda</span>
 		<div id="myCarousel" class="carousel slide">
 		  <div class="carousel-inner crop-highlights">
 		    <div class="active item"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/fashion-1.jpeg"></div>
@@ -104,7 +118,6 @@
 		</div>
 	</div>
 	<div class="span6 highlight">
-		<span>Fotojornalismo</span>
 		<div id="myCarousel2" class="carousel slide">
 		  <div class="carousel-inner crop-highlights">
 		    <div class="active item"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/jornalism.jpeg"></div>
@@ -117,7 +130,6 @@
 </div>
 <div class="show-grid">
 	<div class="span6 highlight">
-		<span>Retrato</span>
 		<div id="myCarousel3" class="carousel slide">
 		  <div class="carousel-inner crop-highlights">
 		    <div class="active item"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/portrait-1.jpeg"></div>
@@ -128,7 +140,6 @@
 		</div>
 	</div>
 	<div class="span6 highlight">
-		<span>Recém-Nascido</span>
 		<div id="myCarousel4" class="carousel slide">
 		  <div class="carousel-inner crop-highlights">
 		    <div class="active item"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/baby-2.jpg"></div>			
@@ -139,17 +150,6 @@
 		</div>
 	</div>	
 </div>
-<div class="row">
-	<div class="separator offset4"></div>
-</div>
-<!--div class="row">
-	<div class="span6">
-		<center><h5>Fotógrafos por Categoria</h5></center>
-	</div>
-	<div class="span6">
-		<center><h5>Fotógrafos na sua Região</h5></center>
-	</div>	
-</div-->
 {% endblock %}
 
 {% block extrascripts %}
