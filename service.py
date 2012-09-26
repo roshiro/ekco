@@ -62,7 +62,7 @@ class PortfolioService():
 			p.name = obj['name']
 			p.put()
 		else:
-			p = Portfolio(name=obj['name'], user=user)
+			p = Portfolio(name=obj['name'], user=user, cover="")
 			p.put()
 		return p
 			
@@ -73,6 +73,8 @@ class PortfolioService():
 		
 	def addPhotos(self, portfolio_id, blob_keys):
 		p = Portfolio.get_by_id(int(portfolio_id))
+		if not p.cover:
+			p.cover = blob_keys[0]
 		for index in blob_keys:
 			p.photos.append(index)
 		return p.put()
@@ -82,6 +84,24 @@ class PortfolioService():
 		for index in blob_keys:
 			p.photos.remove(index)
 		return p.put()
+
+	def getPortfolio(self, portfolio_id):
+		try:
+			return Portfolio.get_by_id(int(portfolio_id))
+		except:
+			return None
+			
+	def getPortfolios(self, user):
+		portfolios = Portfolio.all().filter('user =', user).fetch(10)
+		return portfolios
+	
+	def getListInJSON(self, portfolios):
+		jsonList = []
+		if portfolios:
+			logging.debug('%s', portfolios)
+			for p in portfolios:
+				jsonList.append(toJSON(p))
+		return jsonList
 
 class UserService():
 	def save(self, obj):

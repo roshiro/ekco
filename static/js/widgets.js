@@ -434,12 +434,34 @@ var __s = myapp,
 				$("#portfolioName").modal();
 			});
 			
+			$('.portfolio-wrapper').delegate("button", "click", function() {
+				var isSee = $(this).hasClass('btn-see'),
+					isDelete = $(this).hasClass('btn-delete'),
+					isEdit = $(this).hasClass('btn-edit'),
+					portfolioId = $(this).attr('portfolioid');
+					
+				if(isSee) {
+					
+				} else if(isDelete) {
+					$.post('/portfolio/delete/'+portfolioId, function(data) {
+						if(data && data.status == 'success') {
+							$('div[portfolioid='+portfolioId+']').fadeOut('slow', function() {
+								$(this).remove();
+							});
+						}
+					});
+				} else if(isEdit) {
+					
+				}
+			});
+			
 			$('#btn-save-porfolioname').click(function() {
 				var name = $('#input-portfolio-name').attr('value');
 				$.post('/portfolio/new', {'name': name}, function(data) {
 					if(data.status == "success") {
 						activePortfolio = JSON.parse(data.portfolio)[0];
 						$('.modal').modal('hide');
+						$('#img-list').empty();
 						$('#portfolioModal').modal();
 						$('#portfolio-name-label').html(activePortfolio.name);
 					} else {
@@ -447,7 +469,21 @@ var __s = myapp,
 					}
 				});
 			});
-			
+
+			$('#portfolioModal').on('hidden', function() {
+				var content;
+				$.ajax({
+					url: '/partial/portfolio/' + activePortfolio.id,
+					type: 'GET',
+					async: false,
+					dataType: 'text',
+					success: function(html) {
+						content = html;
+						$('.portfolio-wrapper').append(content);
+					}
+				});
+			});
+						
 			$('#img-list').delegate("button", "click", function() {
 				if($(this).hasClass('btn-delete')) {
 					var imgId = $(this).attr('imgid'),
@@ -464,7 +500,7 @@ var __s = myapp,
 			});
 			
 			$('.btn-upload').click(function() {
-				var actionUrl = _getUploadURL(user.username),
+				/*var actionUrl = _getUploadURL(user.username),
 					imgElem = $('#img-list .img-preview')[0];
 					files = [imgElem.src],
 					imgId = $(imgElem).attr('id'),
@@ -474,7 +510,21 @@ var __s = myapp,
 					_uploadFiles(imgId, files, activePortfolio.id, actionUrl, mimetype);	
 				} else {
 					alert('Selecione alguma foto para upload');
-				}
+				}*/
+				var imgElem = $('#img-list .img-preview');
+				
+				for(var i=0; i<imgElem.length; i++) {
+					var	actionUrl = _getUploadURL(user.username),
+						files = [imgElem[i].src],
+						imgId = $(imgElem[i]).attr('id'),
+						mimetype = $(imgElem[i]).attr('type');
+
+					if(files && files.length > 0) {
+						_uploadFiles(imgId, files, activePortfolio.id, actionUrl, mimetype);	
+					} else {
+						alert('Selecione alguma foto para upload');
+					}					
+				}					
 			});
 			
 			$('.btn-contact-me').click(function(event) {

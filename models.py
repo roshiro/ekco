@@ -36,6 +36,7 @@ class Portfolio(db.Model):
 	user = db.ReferenceProperty(User)
 	name = db.StringProperty(required=False)
 	photos = db.StringListProperty(default=[])
+	cover = db.StringProperty(required=False)
 	created_at = db.DateTimeProperty(auto_now_add=True, indexed=True)
 	
 	def to_dict(self):

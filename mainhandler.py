@@ -21,6 +21,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from gaesessions import get_current_session
 from google.appengine.api import taskqueue
 from google.appengine.ext.db import Key
+from google.appengine.api import images
 
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
@@ -206,7 +207,12 @@ class ProfilePage(webapp.RequestHandler):
 	def get(self, username):
 		loggedUser = getLoggedInUser()
 		user = userService.get(username)
-		template_values = {'isLoggedIn': isLoggedIn(), 'loggedInUser': loggedUser, 'user': user, 'faceAppId': FACEBOOK["appId"]}
+		portfolios = portfolioService.getPortfolios(user)
+		template_values = {'isLoggedIn': isLoggedIn(), 
+			'loggedInUser': loggedUser, 
+			'user': user, 
+			'portfolios': portfolios,
+			'faceAppId': FACEBOOK["appId"]}
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'profile.html')	
 		self.response.out.write(template.render(path, template_values))
 
@@ -263,7 +269,16 @@ class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
 		resource = str(urllib.unquote(resource))
 		blob_info = blobstore.BlobInfo.get(resource)
 		self.send_blob(blob_info)
-		
+
+class ServeHandlerTest(blobstore_handlers.BlobstoreDownloadHandler):
+	def get(self, resource):
+		resource = str(urllib.unquote(resource))
+		blob_info = blobstore.BlobInfo.get(resource)
+		img = images.Image(blob_info)
+		img.resize(32,32)
+		thumb = img.execute_transforms()
+		self.send_blob(thumb)
+
 class NewPortfolio(webapp.RequestHandler):
 	def post(self):
 		name = self.request.get("name")
@@ -275,7 +290,22 @@ class NewPortfolio(webapp.RequestHandler):
 		logging.info('%s', dic)
 		self.response.headers['Content-Type'] = 'application/json'
 		self.response.out.write(simplejson.dumps({'status': 'success', 'portfolio': toJSON(portfolio) }))
-		
+
+class DeletePortfolio(webapp.RequestHandler):
+	def post(self, portfolio_id):
+		self.response.headers['Content-Type'] = 'application/json'
+		if portfolio_id:
+			portfolioService.delete(portfolio_id)		
+			self.response.out.write(simplejson.dumps({'status': 'success'}))
+		else:
+			self.response.out.write(simplejson.dumps({'status': 'error', 'message': 'no ID provided'}))
+
+class PartialPortfolio(webapp.RequestHandler):
+	def get(self, portfolio_id):
+		portfolio = portfolioService.getPortfolio(portfolio_id)
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'partial_portfolio_thumb.html')	
+		self.response.out.write(template.render(path, {'portfolio': portfolio}))
+	
 application = webapp.WSGIApplication([
 									   	('/', LandingPage),
 										('/home', Home),
@@ -292,7 +322,10 @@ application = webapp.WSGIApplication([
 										('/getuploadurl/([^/]+)?', GenerateUploadUrl),
 										('/upload', UploadHandler),
 										('/serve/([^/]+)?', ServeHandler),
-										('/portfolio/new', NewPortfolio)
+										('/servetest/([^/]+)?', ServeHandlerTest),
+										('/portfolio/new', NewPortfolio),
+										('/portfolio/delete/([^/]+)?', DeletePortfolio),
+										('/partial/portfolio/([^/]+)?', PartialPortfolio)
 									 ], debug=True)
 
 def main():
