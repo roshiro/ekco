@@ -68,6 +68,7 @@ class PortfolioService():
 			
 	def delete(self, portfolio_id):
 		p = Portfolio.get_by_id(int(portfolio_id))
+		blobstore.delete(p.photos)
 		p.delete()
 		return
 		

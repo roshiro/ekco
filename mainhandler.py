@@ -270,14 +270,34 @@ class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
 		blob_info = blobstore.BlobInfo.get(resource)
 		self.send_blob(blob_info)
 
-class ServeHandlerTest(blobstore_handlers.BlobstoreDownloadHandler):
-	def get(self, resource):
+class ServeCoverHandler(blobstore_handlers.BlobstoreDownloadHandler):
+	def get(self, width, quality, resource):
 		resource = str(urllib.unquote(resource))
-		blob_info = blobstore.BlobInfo.get(resource)
-		img = images.Image(blob_info)
-		img.resize(32,32)
-		thumb = img.execute_transforms()
-		self.send_blob(thumb)
+		dimensions = self.getDimensions(resource)
+		img = images.Image(blob_key=resource)
+		if dimensions['width'] > int(width):
+			img.resize(width=int(width))
+		try:
+			try:
+				thumbnail = img.execute_transforms(output_encoding=images.JPEG, quality=int(quality))	
+				self.response.headers['Content-Type'] = 'image/jpeg'
+				logging.debug('Converted to JPEG')
+			except:
+				thumbnail = img.execute_transforms(output_encoding=images.PNG)	
+				self.response.headers['Content-Type'] = 'image/png'
+				logging.debug('Converted to PNG')
+			finally:
+				self.response.out.write(thumbnail)
+		except:
+			self.redirect('/serve/'+resource)
+			return
+
+	def getDimensions(self, blob_key):
+		data = blobstore.fetch_data(blob_key, 0, 50000)
+		img = images.Image(image_data=data)
+		dimesions = {'width': img.width, 'height': img.height}
+		logging.debug(dimesions)
+		return dimesions
 
 class NewPortfolio(webapp.RequestHandler):
 	def post(self):
@@ -322,14 +342,18 @@ application = webapp.WSGIApplication([
 										('/getuploadurl/([^/]+)?', GenerateUploadUrl),
 										('/upload', UploadHandler),
 										('/serve/([^/]+)?', ServeHandler),
-										('/servetest/([^/]+)?', ServeHandlerTest),
+										('/servecover/([^/]+)?/([^/]+)?/([^/]+)?', ServeCoverHandler),
 										('/portfolio/new', NewPortfolio),
 										('/portfolio/delete/([^/]+)?', DeletePortfolio),
 										('/partial/portfolio/([^/]+)?', PartialPortfolio)
 									 ], debug=True)
 
 def main():
-  run_wsgi_app(application)
+	if env == 'DEV':
+		logging.getLogger().setLevel(logging.DEBUG)
+	else:
+		logging.getLogger().setLevel(logging.INFO)
+	run_wsgi_app(application)
 
 if __name__ == '__main__':
   main()
