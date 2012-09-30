@@ -15,7 +15,6 @@
 		<img src="{{ user.avatar_thumb }}?type=large" class="img-polaroid" width="100px">
 	</div>
 	<div class="span6 user-info">
-		<button id="user-edit-link" class="btn btn-link btn-small"><i class="icon-edit"></i> Editar</button>
 		<div class="" rel="tootip">
 			<h3 class="hide-on-edit"><i><span id="user-name">{{ user.name }}</span></i></h3>
 		</div>
@@ -44,19 +43,15 @@
 	<div class="contact-wrapper span4">
 		<button class="btn btn-large btn btn-warning btn-contact-me" type="button">Entre em Contato  <i class="icon-white icon-comment"></i></button>
 	</div>
-	<!--div class="span4 location-wrapper round shadow">
-		<div class="map-wrapper"><img class="img-rounded" src="/images/map.jpg"></div>
-		<p class="location editable"><i class="icon-map-marker"></i> {{ user.location }}</p>		
-	</div-->
 </div>
 <div class="portfolio-wrapper">
 	<p class="title">Portfolio <button id="btn-new-portfolio" class="btn btn-link btn-small" type="button"><i class=" icon-plus-sign"></i> Novo portfólio</button></p>
 	{% for p in portfolios %}
 	<div class="offset2" portfolioid="{{ p.key.id }}">
 		<ul class="thumbnails">
-			<li class="span8">
-				<div class="thumbnail crop round">
-					<a class="cover" href="/portfolio/{{ p.key.id }}"><img src="/servecover/620/60/{{ p.cover }}"></a>
+			<li class="span8 shadow">
+				<div class="thumbnail round">
+					<a class="cover" href="/portfolio/{{ p.key.id }}"><img class="img-rounded" src="/serve/{{ p.cover }}?width=628&height=182&quality=70"></a>
 					<div class="label-overlay">
 						<p class="title">{{ p.name }}</p>
 					</div>					
@@ -71,39 +66,7 @@
 	</div>
 	{% endfor %}
 </div>
-<div id="portfolioName" class="modal hide fade">
-	<div class="modal-header">
-		<h3>Nome do Portfolio</h3>
-	</div>
-	<div class="modal-body">  
-		<input id="input-portfolio-name" type="text" class="input-xlarge" placeholder="ex.: Trash the Dress">
-	</div>
-	<div class="modal-footer">	
-	    <a href="#" class="btn close-modal">Cancelar</a>
-		<a href="#" id="btn-save-porfolioname" class="btn btn-primary">Continuar</a>	
-	</div>	
-</div>
-<div id="portfolioModal" class="create-portfolio-wrapper modal hide fade">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3><span id="portfolio-name-label"></span>
-			<button class="btn btn-link btn-small fileinput-button">
-	            <i class="icon-plus"></i>
-	            <span>Adicionar Fotos...</span>
-	            <input type="file" name="files" multiple="" id="input-files-field" class="hidden-file-input">
-	        </button>		
-		</h3>
-	</div>
-	<div class="modal-body">  
-		<div id="img-list"></div>		
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-small btn-primary btn-upload">
-            <i class="icon-upload icon-white"></i>
-            <span>Iniciar Upload...</span>
-        </button>
-	</div>
-</div>
+<div id="partial-add-photos"></div>
 <div id="contactModal" class="modal hide fade">
 	<div class="modal-header">
 	    <h3>{{ user.name }}</h3>
@@ -117,72 +80,8 @@
 	    <a href="#" class="btn close-modal">Fechar</a>
 	</div>	
 </div>
-<div id="edit-profile" class="modal hide fade">
-	<div class="modal-header">
-	    <h3>Editar perfil</h3>
-	</div>		
-  	<div class="modal-body">
-		<p>
-		<form class="form-horizontal">
-			<div class="control-group">
-				<label class="control-label" for="inputName">Nome *</label>
-				<div class="controls">
-					<input type="text" id="inputName" placeholder="Nome" value="{{ user.name }}">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="inputAbout">Sobre você *</label>
-				<div class="controls">
-					{% if user.about %}
-						<textarea type="text" id="inputAbout" placeholder="Sobre você" value="{{ user.about }}"></textarea>
-					{% else %}
-						<textarea type="text" id="inputAbout" placeholder="Sobre você" value=""></textarea>
-					{% endif %}
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="inputWebsite">Fone</label>
-				<div class="controls">
-					{% if user.phone %}
-						<input type="text" id="inputPhone" placeholder="Telefone" value="{{ user.phone }}">
-					{% else %}
-						<input type="text" id="inputPhone" placeholder="Telefone" value="">
-					{% endif %}
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="inputWebsite">Endereço</label>
-				<div class="controls">
-					{% if user.address %}
-						<input type="text" id="inputAddress" placeholder="Telefone" value="{{ user.address }}">
-					{% else %}
-						<input type="text" id="inputAddress" placeholder="Telefone" value="">
-					{% endif %}
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="inputWebsite">Website</label>
-				<div class="controls">
-					{% if user.website %}
-						<input type="text" id="inputWebsite" placeholder="website" value="{{ user.website }}">
-					{% else %}
-						<input type="text" id="inputWebsite" placeholder="website" value="">
-					{% endif %}
-				</div>
-			</div>
-			<div class="alert alert-error" style="display: none;">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				Preencha os campos obrigatórios.
-			</div>
-		</form>		
-		</p>
-	</div>
-	<div class="modal-footer">	
-	    <a href="#" class="btn close-modal">Cancelar</a>
-		<a href="#" id="save-profile" class="btn btn-primary">Salvar</a>	
-	</div>		
-</div>
 <div id="partials"></div>
+
 <!--
 - Mensagem de como iniciar para primeiro acesso
 - Iniciar portfólio em destaque

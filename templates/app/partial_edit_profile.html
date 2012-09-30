@@ -1,0 +1,65 @@
+<div id="edit-profile" class="modal hide fade">
+	<div class="modal-header">
+	    <h3>Editar perfil</h3>
+	</div>		
+  	<div class="modal-body">
+		<p>
+		<form class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="inputName">Nome *</label>
+				<div class="controls">
+					<input type="text" id="inputName" placeholder="Nome" value="{{ user.name }}">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputAbout">Sobre você *</label>
+				<div class="controls">
+					{% if user.about %}
+						<textarea type="text" id="inputAbout" placeholder="Sobre você" value="{{ user.about }}"></textarea>
+					{% else %}
+						<textarea type="text" id="inputAbout" placeholder="Sobre você" value=""></textarea>
+					{% endif %}
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputWebsite">Fone</label>
+				<div class="controls">
+					{% if user.phone %}
+						<input type="text" id="inputPhone" placeholder="Telefone" value="{{ user.phone }}">
+					{% else %}
+						<input type="text" id="inputPhone" placeholder="Telefone" value="">
+					{% endif %}
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputWebsite">Endereço</label>
+				<div class="controls">
+					{% if user.address %}
+						<input type="text" id="inputAddress" placeholder="Endereço" value="{{ user.address }}">
+					{% else %}
+						<input type="text" id="inputAddress" placeholder="Endereço" value="">
+					{% endif %}
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputWebsite">Website</label>
+				<div class="controls">
+					{% if user.website %}
+						<input type="text" id="inputWebsite" placeholder="website" value="{{ user.website }}">
+					{% else %}
+						<input type="text" id="inputWebsite" placeholder="website" value="">
+					{% endif %}
+				</div>
+			</div>
+			<div class="alert alert-error" style="display: none;">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+				Preencha os campos obrigatórios.
+			</div>
+		</form>		
+		</p>
+	</div>
+	<div class="modal-footer">	
+	    <a href="#" class="btn close-modal">Cancelar</a>
+		<a href="#" id="save-profile" class="btn btn-primary">Salvar</a>	
+	</div>		
+</div>

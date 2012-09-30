@@ -267,13 +267,37 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
 	def get(self, resource):
 		resource = str(urllib.unquote(resource))
-		blob_info = blobstore.BlobInfo.get(resource)
-		self.send_blob(blob_info)
+		height = self.request.get('height')
+		width = self.request.get('width')
+		quality = self.request.get('quality')
+		dimensions = getDimensions(resource)
+		if not quality:
+			quality = 60
+		# Crop if both are set
+		if height and width:
+			thumbnail = rescale(resource, width, height, 'middle', 'top')
+			try:
+				thumbnail = thumbnail.execute_transforms(output_encoding=images.JPEG, quality=int(quality))
+				self.response.headers['Content-Type'] = 'image/jpeg'
+				logging.debug('Converted to JPEG')
+			except:
+				thumbnail = thumbnail.execute_transforms(output_encoding=images.PNG)	
+				self.response.headers['Content-Type'] = 'image/png'
+				logging.debug('Converted to PNG')
+			finally:
+				self.response.out.write(thumbnail)
+							
+		else:
+			blob_info = blobstore.BlobInfo.get(resource)
+			self.send_blob(blob_info)
+		
+		#blob_info = blobstore.BlobInfo.get(resource)
+		#self.send_blob(blob_info)
 
 class ServeCoverHandler(blobstore_handlers.BlobstoreDownloadHandler):
 	def get(self, width, quality, resource):
 		resource = str(urllib.unquote(resource))
-		dimensions = self.getDimensions(resource)
+		dimensions = getDimensions(resource)
 		img = images.Image(blob_key=resource)
 		if dimensions['width'] > int(width):
 			img.resize(width=int(width))
@@ -292,12 +316,54 @@ class ServeCoverHandler(blobstore_handlers.BlobstoreDownloadHandler):
 			self.redirect('/serve/'+resource)
 			return
 
-	def getDimensions(self, blob_key):
-		data = blobstore.fetch_data(blob_key, 0, 50000)
-		img = images.Image(image_data=data)
-		dimesions = {'width': img.width, 'height': img.height}
-		logging.debug(dimesions)
-		return dimesions
+def getDimensions(blob_key):
+	data = blobstore.fetch_data(blob_key, 0, 50000)
+	img = images.Image(image_data=data)
+	dimesions = {'width': img.width, 'height': img.height}
+	logging.debug(dimesions)
+	return dimesions
+
+def rescale(blob_key, width, height, halign='middle', valign='middle'):
+	"""Resize then optionally crop a given image.
+
+	Attributes:
+	blob_key: blob_key of the image
+	width: The desired width
+	height: The desired height
+	halign: Acts like photoshop's 'Canvas Size' function, horizontally
+	       aligning the crop to left, middle or right
+	valign: Verticallly aligns the crop to top, middle or bottom
+	999999
+	"""
+	image_data = blobstore.fetch_data(blob_key, 0, 999999)	
+	image = images.Image(image_data)
+	desired_wh_ratio = float(width) / float(height)
+	wh_ratio = float(image.width) / float(image.height)
+
+	if desired_wh_ratio > wh_ratio:
+		# resize to width, then crop to height
+		image.resize(width=int(width))
+		image.execute_transforms()
+		trim_y = (float(image.height - int(height)) / 2) / image.height
+		if valign == 'top':
+			image.crop(0.0, 0.0, 1.0, 1 - (2 * trim_y))
+		elif valign == 'bottom':
+			image.crop(0.0, (2 * trim_y), 1.0, 1.0)
+		else:
+			image.crop(0.0, trim_y, 1.0, 1 - trim_y)
+	else:
+		# resize to height, then crop to width
+		image.resize(height=int(height))
+		image.execute_transforms()
+		trim_x = (float(image.width - int(width)) / 2) / image.width
+		if halign == 'left':
+			image.crop(0.0, 0.0, 1 - (2 * trim_x), 1.0)
+		elif halign == 'right':
+			image.crop((2 * trim_x), 0.0, 1.0, 1.0)
+		else:
+			image.crop(trim_x, 0.0, 1 - trim_x, 1.0)
+
+	return image
 
 class NewPortfolio(webapp.RequestHandler):
 	def post(self):
@@ -326,12 +392,55 @@ class PartialPortfolio(webapp.RequestHandler):
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'partial_portfolio_thumb.html')	
 		self.response.out.write(template.render(path, {'portfolio': portfolio}))
 
+class EditPortfolio(webapp.RequestHandler):
+	def get(self, portfolio_id):
+		portfolio = portfolioService.getPortfolio(portfolio_id)
+		user = User.get_by_id(portfolio.user.key().id())
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'portfolio_edit.html')	
+		self.response.out.write(template.render(path, {'user': user, 'isLoggedIn': isLoggedIn(), 'loggedInUser': getLoggedInUser(), 'portfolio': portfolio}))
+
+class PhotoDelete(webapp.RequestHandler):
+	def post(self, portfolio_id, photo):
+		user = getLoggedInUser()
+		p = portfolioService.getPortfolio(portfolio_id)
+		logging.debug('%s %s', user.key().id(), p.user.key().id())
+		if user and user.key().id() == p.user.key().id():
+			logging.debug('User authorized to delete photo %s', urllib2.unquote(photo))
+			try:
+				portfolioService.deletePhotos(portfolio_id, [urllib2.unquote(photo)])
+				self.response.headers['Content-Type'] = 'application/json'
+				self.response.out.write(simplejson.dumps({'status': 'success'}))				
+			except:
+				self.response.headers['Content-Type'] = 'application/json'
+				self.response.out.write(simplejson.dumps({'status': 'error'}))
+		else:
+			logging.debug('User not authorized')
+			self.response.headers['Content-Type'] = 'application/json'
+			self.response.out.write(simplejson.dumps({'status': 'error', 'message': 'user not authorized'}))
+
+class JsonGetPorfolio(webapp.RequestHandler):
+	def get(self, portfolio_id):
+		portfolio = portfolioService.getPortfolio(portfolio_id)
+		json = toJSON(portfolio)
+		self.response.headers['Content-Type'] = 'application/json'
+		self.response.out.write(simplejson.dumps({'status': 'success', 'portfolio': json}))
+
 class FullPortfolio(webapp.RequestHandler):
 	def get(self, portfolio_id):
 		portfolio = portfolioService.getPortfolio(portfolio_id)
 		user = User.get_by_id(portfolio.user.key().id())
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'portfolio.html')	
 		self.response.out.write(template.render(path, {'user': user, 'isLoggedIn': isLoggedIn(), 'loggedInUser': getLoggedInUser(), 'portfolio': portfolio}))
+
+class PartialAddPhotos(webapp.RequestHandler):
+	def get(self):
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'partial_add_photos.html')	
+		self.response.out.write(template.render(path, {}))
+
+class PartialEditProfile(webapp.RequestHandler):
+	def get(self):
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'partial_edit_profile.html')	
+		self.response.out.write(template.render(path, {}))
 
 class AboutPage(webapp.RequestHandler):
 	def get(self):
@@ -364,8 +473,13 @@ application = webapp.WSGIApplication([
 										('/servecover/([^/]+)?/([^/]+)?/([^/]+)?', ServeCoverHandler),
 										('/portfolio/new', NewPortfolio),
 										('/portfolio/delete/([^/]+)?', DeletePortfolio),
+										('/photos/delete/([^/]+)?/([^/]+)?', PhotoDelete),
 										('/partial/portfolio/([^/]+)?', PartialPortfolio),
-										('/portfolio/([^/]+)?', FullPortfolio)
+										('/partial/addphotos', PartialAddPhotos),
+										('/partial/editprofile', PartialEditProfile),
+										('/portfolio/edit/([^/]+)?', EditPortfolio),
+										('/portfolio/([^/]+)?', FullPortfolio),
+										('/portfolio/get/json/([^/]+)?', JsonGetPorfolio)
 									 ], debug=True)
 
 def main():

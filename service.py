@@ -83,8 +83,11 @@ class PortfolioService():
 	def deletePhotos(self, portfolio_id, blob_keys):
 		p = Portfolio.get_by_id(int(portfolio_id))
 		for index in blob_keys:
+			logging.debug('Removing photo %s from portfolio %s', index, p.key().id())	
 			p.photos.remove(index)
-		return p.put()
+			blobstore.delete(index)		
+		p.put()
+		return
 
 	def getPortfolio(self, portfolio_id):
 		try:

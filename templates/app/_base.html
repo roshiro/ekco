@@ -69,7 +69,7 @@
 				<div class="controls-header round shadow">
 				{% if isLoggedIn %}
 					<a href="/photos/{{ loggedInUser.username }}"><i class="icon-home"></i> Minha página</a>				
-					<a href="/photos/{{ loggedInUser.username }}"><i class="icon-wrench"></i> Editar</a>
+					<a href="#" id="edit-profile-link"><i class="icon-wrench"></i> Editar</a>
 					<a href="/logout"><i class="icon-off"></i> Logout</a>
 				{% else %}
 					<div class="signup-link"><a href="/signup">Fotógrafo? Clique aqui!</a></div>
@@ -107,6 +107,7 @@
 			</p>			
 		  </div>
 		</div>
+		<div id="partial-edit-profile"></div>
 	</div>
 	<div id="footer">
 		<div class="row">

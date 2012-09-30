@@ -1,0 +1,29 @@
+{% extends "_baseapp.html" %}
+
+{% block title %}
+	<title>Editando Portfolio {{ portfolio.name }}</title>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<button username="{{ user.username }}" class="btn btn-back btn-link"><i class="icon-arrow-left"></i> Perfil de {{ user.name }}</button>
+</div>
+<h2>{{ portfolio.name }} <small>em edição </small><button class="btn btn-success btn-small btn-add-photos" type="button"><i class="icon-plus-sign icon-white"></i> Adicionar Fotos</button></h2>
+<div class="row-fluid">
+	<div class="thumbnails portfolio-edit">
+		<ol>
+		{% for p in portfolio.photos %}
+			<li class="span2 item" photo="{{ p }}">
+				<img photoid="{{ p }}" src="/serve/{{ p }}?width=160&height=160&quality=50" alt="{{ portfolio.name }}">
+				<button id="btn-new-portfolio" portfolioid="{{ portfolio.key.id }}" photoid="{{ p }}" class="btn btn-small btn-delete" type="button"><i class="icon-trash"></i> Excluir</button>
+			</li>
+		{% endfor %}
+		</ol>
+	</div>
+</div>
+<div id="partial-add-photos"></div>
+{% endblock %}
+
+{% block extrascripts %}
+<script>myapp.init.portfolioedit({{ portfolio.key.id }});</script>
+{% endblock %}

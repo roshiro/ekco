@@ -6,14 +6,15 @@
 
 {% block content %}
 <div class="row show-grid">
-	<div class="span6 offset3">
+	<div class="hero-unit span6 offset3">
 		<center>
-		<h1>Fotógrafo:<br>
-			Tenha seu trabalho visto por milhares de pessoas. Sem Pagar nada por isso</h1>
+		<h1>Para Fotógrafos</h1>
+		<p>Tenha seu trabalho visto por milhares de pessoas. Sem Pagar nada por isso</p>
 		</center>
 	</div>
-	<div class="span12">
-		<div id="facebook-button">
+</div>
+<div class="row show-grid">
+		<div class="span7 offset3" id="facebook-button">
 			<center>			
 			<a id="btn-login-facebook" class="facebook-login-button serveFacebook" href="https://www.facebook.com/dialog/oauth?client_id={{ faceAppId }}&redirect_uri={{ faceRedirectUrl }}&scope=email,user_location&state=signup">
 				<div id="serveFacebook" class="serveFacebook-fill">
@@ -24,8 +25,6 @@
 			</a>
 			</center>
 		</div>
-		<center>Colocar aqui algumas vantagens e umas imagens que convençam o fotografo a se cadastrar</center>
-	</div>
 </div>
 {% endblock %}
 

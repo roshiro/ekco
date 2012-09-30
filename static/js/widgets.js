@@ -95,6 +95,18 @@ var __s = myapp,
 	
 	__utils = myapp.utils = {
 		
+		adjustHeight: function(){
+			var browserHeight = parseInt($(window).height()),
+				currentBodyHeight = parseInt($('body').css('height'));
+
+			console.debug('Browser: ' + browserHeight + ' Current Height: ' + currentBodyHeight);
+
+			if(currentBodyHeight < browserHeight) {
+				$('body').css('height', browserHeight + 'px');	
+				$('#content').css('height', (browserHeight-80)+'px');
+			}
+		},
+		
 		getUrlParameter: _getUrlParameter,
 		
 		getCategoryFromUrl: function() {
@@ -306,9 +318,6 @@ var __s = myapp,
 /* Init pages */
 (function () {
 	var _initAll = function() {
-		$('.close-modal').click(function() {
-			$('.modal').modal('hide');
-		});
 	},
 	
 	_handleClasses = function(isHome) {
@@ -434,9 +443,67 @@ var __s = myapp,
 			});
 		},
 		
+		portfolioedit: function(portfolio_id) {
+			_handleClasses(false);
+			
+			// Retrieve HTML for add photos
+			$.ajax({
+				url: '/partial/addphotos', 
+				type:'GET',
+				async: false,
+				success: function(content) {
+					$('#partial-add-photos').html(content);
+				}
+			});
+			
+			// Get Portfolio JSON
+			$.get('/portfolio/get/json/' + portfolio_id, function(data) {
+				if(data.status == 'success') {
+					window.activePortfolio = JSON.parse(data.portfolio)[0];
+				}
+			}, "json");
+			
+			$('.btn-add-photos').click(function() {
+				$('#img-list').empty();
+				$('#portfolioModal').modal();
+				$('#portfolio-name-label').html(window.activePortfolio.name);
+			})
+			
+			$('.btn-back').click(function() {
+				var username = $(this).attr('username');
+				document.location.href="/photos/"+username;
+			});
+			$('.btn-delete').click(function() {
+				var photo = $(this).attr('photoid'),
+					portfolioId = $(this).attr('portfolioid');
+				$.post('/photos/delete/'+portfolioId+'/'+photo, function(data) {
+					if(data && data.status == 'success') {
+						$("li[photo='"+photo+"']").fadeOut();
+					} else {
+						alert('Erro ao tentar excluir foto');
+					}
+				});
+			});			
+			$.get('/partial/addphotos', function(content) {
+				$('#partial-add-photos').html(content);
+				$('#portfolioModal').on('hidden', function() {
+					document.location.reload(true);
+				});					
+			});	
+		},
+
 		profilePage: function() {
 			_initAll();
 			_handleClasses(false);
+			
+			$.ajax({
+				url: '/partial/addphotos', 
+				type:'GET',
+				async: false,
+				success: function(content) {
+					$('#partial-add-photos').html(content);
+				}
+			});
 			
 			$('#btn-new-portfolio').click(function(event) {
 				event.stopPropagation();
@@ -462,8 +529,66 @@ var __s = myapp,
 						}
 					});
 				} else if(isEdit) {
-					
+					document.location.href="/portfolio/edit/" + portfolioId;
 				}
+			});
+			
+			$('#portfolioModal').on('hidden', function() {
+				var content;
+				$.ajax({
+					url: '/partial/portfolio/' + activePortfolio.id,
+					type: 'GET',
+					async: false,
+					dataType: 'text',
+					success: function(html) {
+						content = html;
+						$('.portfolio-wrapper').append(content);
+					}
+				});
+			});
+			
+			$('.btn-contact-me').click(function(event) {
+				event.stopPropagation();
+				$("#contactModal").modal();
+				$('#contactModal .name').html(_loggedInUser.name);
+				$('#contactModal .email').html(_loggedInUser.email);
+				$('#contactModal .address').html(_loggedInUser.address);
+				$('#contactModal .phone').html(_loggedInUser.phone);
+			});
+		},
+		
+		searchPage: function() {
+			_initAll();
+			_handleClasses(false);
+		}
+	}
+})();
+
+(function() {
+
+	//_faceUserId = FB.getUserID();
+	__Services.loadUser();
+
+	$('body').delegate(".close-modal", "click", function() {
+		$('.modal').modal('hide');
+	});
+
+	$('#edit-profile-link').click(function(event) {
+		event.stopPropagation();
+		$("#edit-profile").modal();
+		$('#inputName').attr('value', _loggedInUser.name);
+		$('#inputAbout').attr('value', _loggedInUser.about);
+		$('#inputPhone').attr('value', _loggedInUser.phone);
+		$('#inputAddress').attr('value', _loggedInUser.address);
+		$('#inputWebsite').attr('value', _loggedInUser.website);
+	});
+
+	$.get('/partial/editprofile', function(content) {
+		$('#partial-edit-profile').html(content);
+		
+		setTimeout(function() {
+			$('#input-files-field').change(function() {
+				myapp.handler.loadFile();
 			});
 			
 			$('#btn-save-porfolioname').click(function() {
@@ -480,39 +605,25 @@ var __s = myapp,
 					}
 				});
 			});
-
-			$('#portfolioModal').on('hidden', function() {
-				var content;
-				$.ajax({
-					url: '/partial/portfolio/' + activePortfolio.id,
-					type: 'GET',
-					async: false,
-					dataType: 'text',
-					success: function(html) {
-						content = html;
-						$('.portfolio-wrapper').append(content);
-					}
-				});
-			});
-						
+			
 			$('#img-list').delegate("button", "click", function() {
 				if($(this).hasClass('btn-delete')) {
 					var imgId = $(this).attr('imgid'),
 						filename = $(this).attr('filename'),
 						files = $('#input-files-field')[0].files;
-					
+
 					$('.img-wrapper-id-'+imgId).remove();
 					for(var i=0; i<files.length; i++) {
 						if(files[i].name == filename) {
-							
+
 						}
 					}
 				}
 			});
-			
+
 			$('.btn-upload').click(function() {
 				var imgElem = $('#img-list .img-preview:not(.completed)');
-				
+
 				for(var i=0; i<imgElem.length; i++) {
 					var	actionUrl = _getUploadURL(user.username),
 						files = [imgElem[i].src],
@@ -527,72 +638,51 @@ var __s = myapp,
 				}					
 			});
 			
-			$('.btn-contact-me').click(function(event) {
-				event.stopPropagation();
-				$("#contactModal").modal();
-				$('#contactModal .name').html(_loggedInUser.name);
-				$('#contactModal .email').html(_loggedInUser.email);
-				$('#contactModal .address').html(_loggedInUser.address);
-				$('#contactModal .phone').html(_loggedInUser.phone);
-			});
-			
-			$('#user-edit-link').click(function(event) {
-				event.stopPropagation();
-				$("#edit-profile").modal();
-				$('#inputName').attr('value', _loggedInUser.name);
-				$('#inputAbout').attr('value', _loggedInUser.about);
-				$('#inputPhone').attr('value', _loggedInUser.phone);
-				$('#inputAddress').attr('value', _loggedInUser.address);
-				$('#inputWebsite').attr('value', _loggedInUser.website);
-			});
-			
-			$('#save-profile').click(function() {
-				var name = $('#inputName').attr('value'),
-					about = $('#inputAbout').attr('value'),
-					phone = $('#inputPhone').attr('value'),
-					address = $('#inputAddress').attr('value'),
-					website = $('#inputWebsite').attr('value');
-				
-				if(!name || name == "" || !about || about == "") {
-					$('.alert-error').css('display', 'block');
-				} else {
-					_loggedInUser.name = name;
-					_loggedInUser.about = about;
-					_loggedInUser.phone = phone;
-					_loggedInUser.address = address;
-					_loggedInUser.website = website;
-					
-					$.post('/user/update', {'user': JSON.stringify(_loggedInUser)}, function(data) {
-						$('.modal').modal('hide');						
-						user = _loggedInUser = data.user;
-						$('#user-name').html(user.name);
-						$('#user-about').html(user.about);
-						if(user.website) {
-							var elems = "<a id='user-website' href='"+user.webite+"' target='_blank'>"+user.website+"</a>";
-							$('.website').empty().append(elems);
-						} else {
-							$('#user-website').remove();
-						}
-					});
-				}         
-			});	
-			
-			$('#input-files-field').change(function() {
-				myapp.handler.loadFile();
-			});					
-		},
+		}, 2000);
 		
-		searchPage: function() {
-			_initAll();
-			_handleClasses(false);
-		}
-	}
-})();
+		$('#save-profile').click(function() {
+			var name = $('#inputName').attr('value'),
+				about = $('#inputAbout').attr('value'),
+				phone = $('#inputPhone').attr('value'),
+				address = $('#inputAddress').attr('value'),
+				website = $('#inputWebsite').attr('value');
 
-(function() {
+			if(!name || name == "" || !about || about == "") {
+				$('.alert-error').css('display', 'block');
+			} else {
+				_loggedInUser.name = name;
+				_loggedInUser.about = about;
+				_loggedInUser.phone = phone;
+				_loggedInUser.address = address;
+				_loggedInUser.website = website;
 
-	//_faceUserId = FB.getUserID();
-	__Services.loadUser();
+				$.post('/user/update', {'user': JSON.stringify(_loggedInUser)}, function(data) {
+					$('.modal').modal('hide');						
+					user = _loggedInUser = data.user;
+					$('#user-name').html(user.name);
+					$('#user-about').html(user.about);
+					if(user.website) {
+						var elems = "<a id='user-website' href='"+user.webite+"' target='_blank'>"+user.website+"</a>";
+						$('.website').empty().append(elems);
+					} else {
+						$('#user-website').remove();
+					}
+				});
+			}         
+		});		
+	});
+
+
+	//__utils.adjustHeight();
+
+	//$.Topic('window-resized').subscribe(__utils.adjustHeight);
+
+	/*$(window).resize(function() {
+		setTimeout(function(){
+			$.Topic('window-resized').publish();
+		}, 500);
+	});*/
+
 
 })();
 

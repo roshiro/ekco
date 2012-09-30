@@ -1,0 +1,33 @@
+<div id="portfolioName" class="modal hide fade">
+	<div class="modal-header">
+		<h3>Nome do Portfolio</h3>
+	</div>
+	<div class="modal-body">  
+		<input id="input-portfolio-name" type="text" class="input-xlarge" placeholder="ex.: Trash the Dress">
+	</div>
+	<div class="modal-footer">	
+	    <a href="#" class="btn close-modal">Cancelar</a>
+		<a href="#" id="btn-save-porfolioname" class="btn btn-primary">Continuar</a>	
+	</div>	
+</div>
+<div id="portfolioModal" class="create-portfolio-wrapper modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3><span id="portfolio-name-label"></span>
+			<button class="btn btn-link btn-small fileinput-button">
+	            <i class="icon-plus"></i>
+	            <span>Adicionar Fotos...</span>
+	            <input type="file" name="files" multiple="" id="input-files-field" class="hidden-file-input">
+	        </button>		
+		</h3>
+	</div>
+	<div class="modal-body">  
+		<div id="img-list"></div>		
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-small btn-primary btn-upload">
+            <i class="icon-upload icon-white"></i>
+            <span>Iniciar Upload...</span>
+        </button>
+	</div>
+</div>

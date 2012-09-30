@@ -147,7 +147,7 @@ div.border-white:hover {border: 3px solid lightblue;}
 .portfolio-wrapper .title {font-size: 25px; font-weight: 300; margin: 5px 0 25px 0; text-align: center;}
 .portfolio-wrapper .crop { width: 620px; height: 174px; overflow: hidden; position: relative;}
 .portfolio-wrapper .crop img {width: 100%; margin-top: -10%;}
-.portfolio-wrapper .thumbnail {border: none;}
+.portfolio-wrapper .thumbnail {border: none; position: relative;}
 .portfolio-wrapper .controls {
 	height: 20px;
 	margin-left: 4px;
@@ -163,6 +163,11 @@ div.border-white:hover {border: 3px solid lightblue;}
 #portfolioModal .img-preview-wrapper:last-child {border-bottom: none;}
 #user-edit-link {position: absolute; right: 0;}
 #portfolio-carousel .carousel-inner .item img {margin: auto;}
+
+/* Portfolio Edit */
+.portfolio-edit .item {position: relative;}
+.portfolio-edit .item .btn-delete {display: none;}
+.portfolio-edit .item:hover .btn-delete {position: absolute; bottom: 0; display: block;}
 
 .location-wrapper {
 	background-color: white;

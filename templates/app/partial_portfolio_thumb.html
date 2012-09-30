@@ -1,14 +1,14 @@
 <div class="offset2" portfolioid="{{ portfolio.key.id }}">
 	<ul class="thumbnails">
 		<li class="span8">
-			<div class="thumbnail crop round">
-				<a href="/portfolio/{{ portfolio.key.id }}"><img src="/servecover/620/60/{{ portfolio.cover }}"></a>
+			<div class="thumbnail round shadow">
+				<a href="/portfolio/{{ portfolio.key.id }}"><img class="img-rounded" src="/serve/{{ portfolio.cover }}?width=620&height=174&quality=70"></a>
 				<div class="label-overlay">
 					<p class="title">{{ portfolio.name }}</p>
 				</div>					
 			</div>
 			<div class="controls">
-				<span class="span2"><button portfolioid="{{ portfolio.key.id }}" class="btn btn-see btn-link btn-small"><i class="icon-th"></i> Ver</button><span class="label label-info">{{ p.photos|length }} fotos</span></span>
+				<span class="span2"><button portfolioid="{{ portfolio.key.id }}" class="btn btn-see btn-link btn-small"><i class="icon-th"></i> Ver</button><span class="label label-info">{{ portfolio.photos|length }} fotos</span></span>
 				<span class="span2"><button portfolioid="{{ portfolio.key.id }}" class="btn btn-delete btn-link btn-small"><i class="icon-remove"></i> Excluir...</button></span>
 				<span class="span2"><button portfolioid="{{ portfolio.key.id }}" class="btn btn-edit btn-link btn-small"><i class="icon-edit"></i> Editar...</button></span>
 			</div>				
