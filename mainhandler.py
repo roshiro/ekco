@@ -53,7 +53,7 @@ class Home(webapp.RequestHandler):
 
 class HomePage(webapp.RequestHandler):
 	def get(self):
-		user = getLoggedInUser()		
+		user = getLoggedInUser()
 		template_values = {'isLoggedIn': isLoggedIn(), 'loggedInUser': user, 'faceAppId': FACEBOOK["appId"]}
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'homepage.html')
 		self.response.out.write(template.render(path, template_values))
@@ -325,13 +325,32 @@ class PartialPortfolio(webapp.RequestHandler):
 		portfolio = portfolioService.getPortfolio(portfolio_id)
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'partial_portfolio_thumb.html')	
 		self.response.out.write(template.render(path, {'portfolio': portfolio}))
-	
+
+class FullPortfolio(webapp.RequestHandler):
+	def get(self, portfolio_id):
+		portfolio = portfolioService.getPortfolio(portfolio_id)
+		user = User.get_by_id(portfolio.user.key().id())
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'portfolio.html')	
+		self.response.out.write(template.render(path, {'user': user, 'isLoggedIn': isLoggedIn(), 'loggedInUser': getLoggedInUser(), 'portfolio': portfolio}))
+
+class AboutPage(webapp.RequestHandler):
+	def get(self):
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'about.html')	
+		self.response.out.write(template.render(path, {'isLoggedIn': isLoggedIn(), 'loggedInUser': getLoggedInUser()}))
+
+class ContactPage(webapp.RequestHandler):
+	def get(self):
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'contact.html')	
+		self.response.out.write(template.render(path, {'isLoggedIn': isLoggedIn(), 'loggedInUser': getLoggedInUser()}))		
+
 application = webapp.WSGIApplication([
 									   	('/', LandingPage),
 										('/home', Home),
 										('/homepage', HomePage),
 										('/search', SearchPage),
 										('/logout', Logout),
+										('/sobre', AboutPage),
+										('/contato', ContactPage),
 										('/facebookauth', AuthFacebook),
 										('/prototype', Prototype),
 										('/signup', SignupPage),
@@ -345,7 +364,8 @@ application = webapp.WSGIApplication([
 										('/servecover/([^/]+)?/([^/]+)?/([^/]+)?', ServeCoverHandler),
 										('/portfolio/new', NewPortfolio),
 										('/portfolio/delete/([^/]+)?', DeletePortfolio),
-										('/partial/portfolio/([^/]+)?', PartialPortfolio)
+										('/partial/portfolio/([^/]+)?', PartialPortfolio),
+										('/portfolio/([^/]+)?', FullPortfolio)
 									 ], debug=True)
 
 def main():

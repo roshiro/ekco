@@ -22,15 +22,15 @@
 	<link rel="stylesheet" href="/stylesheets/style.css" type="text/css" />
 	<link rel="stylesheet" href="/stylesheets/ekfoto.css" type="text/css" />
 	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css" />
-	<link href='http://fonts.googleapis.com/css?family=Niconne' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Cutive' rel='stylesheet' type='text/css'>
 	{% block extracss %}
 	{% endblock %}
 	<script src="/js/modernizr-2.5.2.min.js"></script>
 </head>
 {% if loggedInUser %}
-	<body class="home bg2 app loggedIn">
+	<body class="home bg2 loggedIn">
 {% else %}
-	<body class="home bg2 app non-logged">
+	<body class="home bg2 non-logged">
 {% endif %}
 
 	  <!-- Prompt IE 6 users to install Chrome Frame. -->
@@ -66,8 +66,8 @@
 			</div>
 			<div class="right-header right" class="span2">
 				<!-- All the pages -->
-				<div class="controls-header round shadow">
-				{% if isLoggedIn %}
+				<div class="controls-header  round shadow">
+				{% if isLoggedIn %}			
 					<a href="/photos/{{ loggedInUser.username }}"><i class="icon-home"></i> Minha página</a>				
 					<a href="/photos/{{ loggedInUser.username }}"><i class="icon-wrench"></i> Editar</a>
 					<a href="/logout"><i class="icon-off"></i> Logout</a>
@@ -80,7 +80,7 @@
 				{% endblock %}				
 			</div>
 		</div>
-		<div class="row">
+		<div id="main-content" class="row shadow2 round">
 			{% block content %}
 			{% endblock %}
 		</div>
@@ -111,7 +111,7 @@
 	<div id="footer">
 		<div class="row">
 			<center>Todos os direitos reservados 2012 | <a href="/sobre">Ek Foto</a> | <a href="/contato">Contato</a> | <a href="#">Blog</a></center>
-		</div>		
+		</div>
 	</div>
 	<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>

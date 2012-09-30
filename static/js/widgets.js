@@ -248,6 +248,7 @@ var __s = myapp,
 								"<div class='bar' style='width: 0%;'></div>"+
 							"</div>"+
 						"</div>"+
+						"<div class='label_status'></div>"+
 						"<div class='span1'><button imgid='"+timestamp+"' filename='"+filename+"' class='btn btn-link btn-delete'><i class='icon-trash'></i></button></div>"
 					"</div>";
 
@@ -361,7 +362,9 @@ var __s = myapp,
 				if ( 4 == this.readyState ) {
 					var obj = JSON.parse(xhr.responseText);
 					setTimeout(function() {
-						$('.img-wrapper-id-'+imgId+' .progress').removeClass('progress-striped active');	
+						$('.img-wrapper-id-'+imgId+' .progress').removeClass('progress-striped active');
+						$('.img-wrapper-id-'+imgId+' .img-preview').addClass('completed');
+						$('.img-wrapper-id-'+imgId+' .label_status').html('Completo');
 					}, 1000);
 				}
 		    };
@@ -423,6 +426,14 @@ var __s = myapp,
 			});
 		},
 		
+		portfolio: function() {
+			$($('#portfolio-carousel .carousel-inner .item')[0]).addClass('active');
+			$('.btn-back').click(function() {
+				var username = $(this).attr('username');
+				document.location.href="/photos/"+username;
+			});
+		},
+		
 		profilePage: function() {
 			_initAll();
 			_handleClasses(false);
@@ -441,7 +452,7 @@ var __s = myapp,
 					portfolioId = $(this).attr('portfolioid');
 					
 				if(isSee) {
-					
+					document.location.href="/portfolio/" + portfolioId;
 				} else if(isDelete) {
 					$.post('/portfolio/delete/'+portfolioId, function(data) {
 						if(data && data.status == 'success') {
@@ -500,18 +511,7 @@ var __s = myapp,
 			});
 			
 			$('.btn-upload').click(function() {
-				/*var actionUrl = _getUploadURL(user.username),
-					imgElem = $('#img-list .img-preview')[0];
-					files = [imgElem.src],
-					imgId = $(imgElem).attr('id'),
-					mimetype = $(imgElem).attr('type');
-					
-				if(files && files.length > 0) {
-					_uploadFiles(imgId, files, activePortfolio.id, actionUrl, mimetype);	
-				} else {
-					alert('Selecione alguma foto para upload');
-				}*/
-				var imgElem = $('#img-list .img-preview');
+				var imgElem = $('#img-list .img-preview:not(.completed)');
 				
 				for(var i=0; i<imgElem.length; i++) {
 					var	actionUrl = _getUploadURL(user.username),

@@ -4,7 +4,7 @@
 html{
 	min-height:100%;
 }
-body {
+body.landing {
 	background:white;
 	background-image:url('/images/background.jpg');
 	background-repeat:no-repeat;
@@ -14,11 +14,8 @@ body {
 	font-family: sans-serif; 
 	color: #303030;
 }
-body.app {
-	background:white;
-	background-image: none:	
-}
 .bg1 {background: url('/images/wbackground.jpeg') repeat; }
+.bg2 {background: url('/images/bgnoise.gif') repeat; }
 h1, h2, h3, h4, h5 {margin: 4px 0; padding: 0;font-style: normal;color: #303030;}
 a {text-decoration: none;}
 .text-justify {text-align: justify;}
@@ -59,13 +56,24 @@ button.btn-link {color: #505050;}
 }
 .non-logged .signup-link a:visited {color: darkGoldenrod;}
 
-.photographer-tab:hover
 /* Styles for photo handling on home page */
 .column-photos-1 {margin-right: 6px;}
-.crop-small-main { width: 468px; height: 294px; margin: 0 6px 13px 0; overflow: hidden; position: relative;}
+.crop-small-main { width: 468px; height: 294px; margin: 0 6px 8px 0; overflow: hidden; position: relative;}
 .crop-small-main img { width: 100%; }
 .crop-2-vertical { width: 459px; height: 602px; margin-bottom: 6px; overflow: hidden; position: relative;}
 .crop-2-vertical img { width: 459px; height: 604px;}
+div.border-white {border: 3px solid white;}
+div.border-white:hover {border: 3px solid lightblue;}
+
+.highlight-wrapper {padding-left: 6px;}
+.highlight-title {
+	font-family: Niconne, cursive;
+	font-size: 43px;
+	clear: both;
+	height: 50px;
+	padding-top: 26px;
+	text-align: center;
+}
 
 .bottom-bar {
 	background-color: #F0F0F0;
@@ -131,11 +139,13 @@ button.btn-link {color: #505050;}
 	Profile Page
 */
 .btn-contact-me {margin-top: 15px;}
+.contact-wrapper {text-align: right;}
 .contact-label {font-style: italic; font-size: 12px; text-align: center; width: 104px;}
-.profile-photo-wrapper {padding-top: 15px;}
+.profile-photo-wrapper {padding-top: 15px; text-align: center;}
 .portfolio-wrapper {margin-top: 40px;}
+.portfolio-wrapper a {cursor: pointer;}
 .portfolio-wrapper .title {font-size: 25px; font-weight: 300; margin: 5px 0 25px 0; text-align: center;}
-.portfolio-wrapper .crop { width: 660px; height: 174px; overflow: hidden; position: relative;}
+.portfolio-wrapper .crop { width: 620px; height: 174px; overflow: hidden; position: relative;}
 .portfolio-wrapper .crop img {width: 100%; margin-top: -10%;}
 .portfolio-wrapper .thumbnail {border: none;}
 .portfolio-wrapper .controls {
@@ -152,6 +162,7 @@ button.btn-link {color: #505050;}
 #portfolioModal .img-preview-wrapper {padding: 5px 0; margin-left: 5px; border-bottom: 1px solid lightGrey; font-size: 12px;}
 #portfolioModal .img-preview-wrapper:last-child {border-bottom: none;}
 #user-edit-link {position: absolute; right: 0;}
+#portfolio-carousel .carousel-inner .item img {margin: auto;}
 
 .location-wrapper {
 	background-color: white;
@@ -169,19 +180,36 @@ body.home,
 body.app {
 	font-family: Helvetica, Arial, serif;
 	font-weight: 400;
-	background-image:url('/images/background-gradient.png');
-	background-repeat:repeat-x;
-	background-top: 0px;
 }
 .home #header,
-.app #header {margin-bottom: 20px;}
-.header-logo, .home .header-logo {margin: 10px 0 10px 0px;}
+.app #header {position: relative; margin-bottom: 20px;}
+.home .right-header {
+	position: absolute;
+	right: 0;	
+}
+.header-logo, .home .header-logo {margin: 50px 0 10px 0px;}
+.dd-locations {
+	position: relative;
+	top: 20px;
+	right: 0;
+	float: right;
+}
 .app .header-logo {margin: 10px 0 10px 0px; width: 110px;}
-.home .top-slogan {
-	margin-top: 25px;
-	height: 50px;
-	margin: 14px 0 0 55px;
-	height: 45px;	
+.home .top-slogan {margin: 25px 0 0 55px;}
+.home .top-slogan .phrase {font-family: Niconne, cursive; font-size: 33px;}
+.home .top-slogan .info {
+	font-style: italic;
+	font-family: serif;
+	color: #909090;
+	font-size: 18px;
+	text-align: center;
+	padding-top: 10px;
+	width: 500px;
+	line-height: 23px;
+}
+#main-content {
+	background-color: white;
+	padding: 15px;
 }
 
 /*
@@ -247,7 +275,13 @@ body.app {
 
 div.logout {margin: 0 25px;}
 .home .controls-header,
-.app .controls-header {text-align: right; margin-right: 12px;}
+.app .controls-header {
+	text-align: right;
+	margin-right: 12px;
+	font-weight: bold;
+	background-color: white;
+	padding: 0px 10px 2px 1px;
+}
 .home .controls-header a,
 .app div.controls-header a {margin-left: 5px; color: black; font-size: 12px}
 div.logout a {color: black;}
@@ -296,10 +330,16 @@ a.share-btn-open{font-family: Helvetica, Arial, sans-serif; font-size:11px;color
 	-webkit-box-shadow: 1px -2px 8px #888;
 	box-shadow: 1px -2px 8px #888;
 }
+
 .shadow {
 	-moz-box-shadow: 1px 3px 4px #D8D8D8;
 	-webkit-box-shadow: 1px 3px 4px #D8D8D8;
 	box-shadow: 1px 3px 4px #D8D8D8;
+}
+.shadow2 {
+	-moz-box-shadow: 0px 0px 3px #D8D8D8;
+	-webkit-box-shadow: 0px 0px 3px #D8D8D8;
+	box-shadow: 0px 0px 3px #D8D8D8;
 }
 
 body span.messageholder {
@@ -414,6 +454,16 @@ li {list-style-type: none;}
 
 .thanks-copy {
 	text-align: justify;
+}
+
+/* Footer */
+#footer {
+	clear: both;
+	background-color: lightblue;
+	color: #606060;
+	margin-top: 40px;
+	padding: 10px;
+	font-size: 12px;
 }
 
 #alert_placeholder .alert.warning {background-color: #FDD017; border: 1px solid #EAC117; display: inline;}

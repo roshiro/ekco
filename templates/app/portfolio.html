@@ -1,0 +1,27 @@
+{% extends "_baseapp.html" %}
+
+{% block title %}
+	<title>Portfolio {{ portfolio.name }} por {{ user.name }} | Ek Foto</title>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<button username="{{ user.username }}" class="btn btn-back btn-link"><i class="icon-arrow-left"></i> Perfil de {{ user.name }}</button>
+</div>
+<h2>{{ portfolio.name }}</h2>
+<div id="portfolio-carousel" class="carousel slide">
+	<div class="carousel-inner">
+		{% for photo in portfolio.photos %}
+			<div class="item">
+				<img class="img-rounded" src="/serve/{{ photo }}" />
+			</div>
+		{% endfor %}
+	</div>
+	<a class="carousel-control left" href="#portfolio-carousel" data-slide="prev">&lsaquo;</a>
+	<a class="carousel-control right" href="#portfolio-carousel" data-slide="next">&rsaquo;</a>
+</div>
+{% endblock %}
+
+{% block extrascripts %}
+<script>myapp.init.portfolio();</script>
+{% endblock %}

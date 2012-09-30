@@ -1,4 +1,4 @@
-{% extends "_base.html" %}
+{% extends "_baseapp.html" %}
 
 {% block title %}
 	<title>Meu perfil</title>
@@ -13,8 +13,6 @@
 <div class="row-fluid user-details">
 	<div class="span2 profile-photo-wrapper">
 		<img src="{{ user.avatar_thumb }}?type=large" class="img-polaroid" width="100px">
-		<button class="btn btn-large btn btn-warning btn-contact-me" type="button">Contato  <i class="icon-white icon-comment"></i></button>
-		<div class="contact-label">Clique para ver telefone e endereço.</div>
 	</div>
 	<div class="span6 user-info">
 		<button id="user-edit-link" class="btn btn-link btn-small"><i class="icon-edit"></i> Editar</button>
@@ -43,10 +41,13 @@
 			<div class="span1 pinterest-icon"></div>
 		</div-->
 	</div>
-	<div class="span4 location-wrapper round shadow">
+	<div class="contact-wrapper span4">
+		<button class="btn btn-large btn btn-warning btn-contact-me" type="button">Entre em Contato  <i class="icon-white icon-comment"></i></button>
+	</div>
+	<!--div class="span4 location-wrapper round shadow">
 		<div class="map-wrapper"><img class="img-rounded" src="/images/map.jpg"></div>
 		<p class="location editable"><i class="icon-map-marker"></i> {{ user.location }}</p>		
-	</div>
+	</div-->
 </div>
 <div class="portfolio-wrapper">
 	<p class="title">Portfolio <button id="btn-new-portfolio" class="btn btn-link btn-small" type="button"><i class=" icon-plus-sign"></i> Novo portfólio</button></p>
@@ -55,13 +56,13 @@
 		<ul class="thumbnails">
 			<li class="span8">
 				<div class="thumbnail crop round">
-					<a href=""><img src="/servecover/660/60/{{ p.cover }}"></a>
+					<a class="cover" href="/portfolio/{{ p.key.id }}"><img src="/servecover/620/60/{{ p.cover }}"></a>
 					<div class="label-overlay">
 						<p class="title">{{ p.name }}</p>
 					</div>					
 				</div>
 				<div class="controls">
-					<span class="span2"><button portfolioid="{{ p.key.id }}" class="btn btn-see btn-link btn-small"><i class="icon-th"></i> Ver</button></span>
+					<span class="span2"><button portfolioid="{{ p.key.id }}" class="btn btn-see btn-link btn-small"><i class="icon-th"></i> Ver</button> <span class="label label-info">{{ p.photos|length }} fotos</span></span>
 					<span class="span2"><button portfolioid="{{ p.key.id }}" class="btn btn-delete btn-link btn-small"><i class="icon-remove"></i> Excluir...</button></span>
 					<span class="span2"><button portfolioid="{{ p.key.id }}" class="btn btn-edit btn-link btn-small"><i class="icon-edit"></i> Editar...</button></span>
 				</div>				
@@ -181,6 +182,7 @@
 		<a href="#" id="save-profile" class="btn btn-primary">Salvar</a>	
 	</div>		
 </div>
+<div id="partials"></div>
 <!--
 - Mensagem de como iniciar para primeiro acesso
 - Iniciar portfólio em destaque
@@ -193,7 +195,7 @@
 {% endblock %}
 
 {% block extrascripts %}
-<link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
-<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+<!--link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script-->
 <script>myapp.init.profilePage();</script>
 {% endblock %}
