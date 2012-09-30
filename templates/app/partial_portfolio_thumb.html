@@ -2,7 +2,12 @@
 	<ul class="thumbnails">
 		<li class="span8">
 			<div class="thumbnail round shadow">
-				<a href="/portfolio/{{ portfolio.key.id }}"><img class="img-rounded" src="/serve/{{ portfolio.cover }}?width=620&height=174&quality=70"></a>
+				<a href="/portfolio/{{ portfolio.key.id }}">
+					{% if p.cover %}
+					{% else %}
+						<img class="img-rounded" src="/serve/{{ portfolio.cover }}?width=628&height=182&quality=70">
+					{% endif %}
+				</a>
 				<div class="label-overlay">
 					<p class="title">{{ portfolio.name }}</p>
 				</div>					

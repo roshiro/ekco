@@ -79,14 +79,33 @@ class PortfolioService():
 		for index in blob_keys:
 			p.photos.append(index)
 		return p.put()
-		
+	
+	def setNewCover(self, portfolio):
+		p = Portfolio.get_by_id(portfolio.key().id())
+		logging.debug('In function setNewCover(). %s', p)
+		if p.photos:
+			logging.debug('Found photos in portfolio')
+			for photo in p.photos:
+				logging.debug('Cover set to %s', photo)
+				p.cover = photo
+				p.put()
+	
 	def deletePhotos(self, portfolio_id, blob_keys):
 		p = Portfolio.get_by_id(int(portfolio_id))
+		setNewCover = False
 		for index in blob_keys:
 			logging.debug('Removing photo %s from portfolio %s', index, p.key().id())	
 			p.photos.remove(index)
-			blobstore.delete(index)		
-		p.put()
+			blobstore.delete(index)
+			if p.cover == index:
+				logging.debug('Cover set to None')
+				p.cover = None
+				setNewCover = True
+				p.put()
+				
+		logging.debug('Value o setNewCover = %s', setNewCover)
+		if setNewCover:
+			self.setNewCover(p)
 		return
 
 	def getPortfolio(self, portfolio_id):
@@ -143,7 +162,7 @@ class UserService():
 					location=obj['location'],
 					work=obj['work'],
 					phone='',
-					address='',
+					address=obj['location'],
 					facetoken=obj['facetoken'],
 					faceid=obj['faceid'],
 					document_index_id='')

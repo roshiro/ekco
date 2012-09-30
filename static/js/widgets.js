@@ -436,11 +436,21 @@ var __s = myapp,
 		},
 		
 		portfolio: function() {
+			_handleClasses(false);
+			
 			$($('#portfolio-carousel .carousel-inner .item')[0]).addClass('active');
 			$('.btn-back').click(function() {
 				var username = $(this).attr('username');
 				document.location.href="/photos/"+username;
 			});
+		},
+		
+		about: function() {
+			_handleClasses(false);
+		},
+		
+		contact: function() {
+			_handleClasses(false);
 		},
 		
 		portfolioedit: function(portfolio_id) {

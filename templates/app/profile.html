@@ -51,7 +51,13 @@
 		<ul class="thumbnails">
 			<li class="span8 shadow">
 				<div class="thumbnail round">
-					<a class="cover" href="/portfolio/{{ p.key.id }}"><img class="img-rounded" src="/serve/{{ p.cover }}?width=628&height=182&quality=70"></a>
+					<a class="cover" href="/portfolio/{{ p.key.id }}">
+						{% if p.cover %}
+							<img class="img-rounded" src="/serve/{{ p.cover }}?width=628&height=182&quality=70">
+						{% else %}
+							
+						{% endif %}
+					</a>
 					<div class="label-overlay">
 						<p class="title">{{ p.name }}</p>
 					</div>					
@@ -94,7 +100,5 @@
 {% endblock %}
 
 {% block extrascripts %}
-<!--link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
-<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script-->
 <script>myapp.init.profilePage();</script>
 {% endblock %}

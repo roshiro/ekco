@@ -1,0 +1,1 @@
+W.Skins.newSkin({name:"wysiwyg.viewer.skins.input.SMLoginCheckBoxSkin",Class:{Extends:"mobile.core.skins.BaseSkin",_params:[],_html:'<input skinPart="checkBox" type="checkbox"/><label skinPart="label"></label>',_css:["%label% { font-size:12px; vertical-align:2px; }","%checkBox% {margin:0 5px 0 0;}"]}});

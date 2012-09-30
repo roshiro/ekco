@@ -17,7 +17,7 @@ body.landing {
 .bg1 {background: url('/images/wbackground.jpeg') repeat; }
 .bg2 {background: url('/images/bgnoise.gif') repeat; }
 h1, h2, h3, h4, h5 {margin: 4px 0; padding: 0;font-style: normal;color: #303030;}
-a {text-decoration: none;}
+a {text-decoration: none; cursor: pointer;}
 .text-justify {text-align: justify;}
 button.btn-link {color: #505050;}
 .twitter-icon {
@@ -57,11 +57,13 @@ button.btn-link {color: #505050;}
 .non-logged .signup-link a:visited {color: darkGoldenrod;}
 
 /* Styles for photo handling on home page */
-.column-photos-1 {margin-right: 6px;}
+.photos-main {position: relative;}
+.photo-left img {height: 574px;}
+.photo-right {margin-left: 34px; margin-bottom: 13px;}
+ul.main {padding-left: 20px;}
 .crop-small-main { width: 468px; height: 294px; margin: 0 6px 8px 0; overflow: hidden; position: relative;}
 .crop-small-main img { width: 100%; }
-.crop-2-vertical { width: 459px; height: 602px; margin-bottom: 6px; overflow: hidden; position: relative;}
-.crop-2-vertical img { width: 459px; height: 604px;}
+.crop-2-vertical { margin-bottom: 6px; overflow: hidden; position: relative;}
 div.border-white {border: 3px solid white;}
 div.border-white:hover {border: 3px solid lightblue;}
 
@@ -76,15 +78,12 @@ div.border-white:hover {border: 3px solid lightblue;}
 }
 
 .bottom-bar {
-	background-color: #F0F0F0;
 	z-index: 999;
-	position: absolute;
-	width: 100%;
-	float: right;
 	bottom: 0;
 	padding: 5px;
 	font-size: 12px;
 	color: #787878;
+	line-height: 12px;
 }
 
 .crop-small-main .photo-footer,
