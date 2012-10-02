@@ -33,111 +33,85 @@
 					<div class="view-gallery-link round"><i class="icon-th icon-white"></i>  Abrir galeria de <span>Cleber Bauer</span></div>
 				</div>				
 			</div>			
-			<a href="" class="thumbnail border-white"><img src="/images/big_home2.jpg"></a>
+			<a href="#" class="thumbnail border-white trackable" action="homepage" label="main-vertical"><img src="http://commondatastorage.googleapis.com/ekfotoco/homepagephotos/big_home2.jpg"></a>
 			<div class="bottom-bar show-grid">
 				<i class="icon-star-empty"></i> foto por <i>Cleber Brauner</i>
 			</div>			
 		</li>		
 		<li class="span6 photos-main crop-small-main photo-right photo-right-top">
-			<a href="" class="thumbnail"><img src="/images/top-small3.jpg"></a>
+			<a href="#" class="thumbnail trackable" action="homepage" label="main-horizontal-top"><img src="http://commondatastorage.googleapis.com/ekfotoco/homepagephotos/top-small3.jpg"></a>
 			<div class="bottom-bar show-grid">
 				<i class="icon-star-empty"></i> foto por <i>Renato d'Paula</i>
 			</div>						
 		</li>	
 		<li class="span6 photos-main crop-small-main photo-right">
-			<a href="" class="thumbnail"><img src="/images/top_right.jpg"></a>
+			<a href="#" class="thumbnail trackable" action="homepage" label="main-horizontal-bottom"><img src="http://commondatastorage.googleapis.com/ekfotoco/homepagephotos/top_right.jpg"></a>
 			<div class="bottom-bar show-grid">
 				<i class="icon-star-empty"></i> foto por <i>Ces't La Vie</i>
 			</div>			
 		</li>
 	</ul>
 </div>
-<!--div class="row-fluid span12">
-	<div class="row-fluid span6 column-photos-1">
-		<div class="border-white crop-small-main shadow">
-			<div class="overlay-black">
-				<div class="photo-footer">
-					<div class="view-gallery-link round"><i class="icon-th icon-white"></i>  Abrir galeria de <span>Normal Leal</span></div>
-				</div>				
-			</div>			
-			<a href="#"><img class="" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/wedding.jpg"></a>
-			<div class="bottom-bar show-grid">
-				<i class="icon-star-empty"></i> foto por <i>Rafael Oshiro</i>
-			</div>
-		</div>
-		<div class="border-white crop-small-main shadow">
-			<div class="overlay-black">
-				<div class="photo-footer">
-					<div class="view-gallery-link round"><i class="icon-th icon-white"></i>  Abrir galeria de <span>Normal Leal</span></div>
-				</div>				
-			</div>			
-			<a href="#"><img class="" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/birthday.jpeg"/></a>
-			<div class="bottom-bar show-grid">
-				<i class="icon-star-empty"></i> foto por <i>New Star</i>
-			</div>
-		</div>
-	</div>
-	<div class="">
-		<div class="border-white crop-2-vertical shadow">
-			<div class="overlay-black">
-				<div class="photo-footer">
-					<div class="view-gallery-link round"><p><i class="icon-th icon-white"></i>   Abrir galeria de <span>Normal Leal</span></p></div>
-				</div>				
-			</div>
-			<a href="#"><img src="/images/big_home2.jpg" class="" /></a>
-			<div class="bottom-bar show-grid">
-				<i class="icon-star-empty"></i> foto por <i>Normal Leal</i>
-			</div>
-		</div>
-	</div>	
-</div-->
+{% if highlights %}
 <div class="row">
-	<div class="highlight-title">Nossa seleção</div>
+	<div class="highlight-title">Nossos Destaques</div>
 </div>
-<div class="show-grid highlight-wrapper">
-	<div class="span6 highlight">
-		<div id="myCarousel" class="carousel slide">
-		  <div class="carousel-inner crop-highlights shadow">
-		    <div class="active item"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/fashion-1.jpeg"></div>
-		    <div class="item"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/fashion-2.jpeg"></div>
-		  </div>
-		  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-		  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-		</div>
-	</div>
-	<div class="span6 highlight">
-		<div id="myCarousel2" class="carousel slide">
-		  <div class="carousel-inner crop-highlights shadow">
-		    <div class="active item"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/jornalism.jpeg"></div>
-		    <div class="item"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/jornalism-2.jpg"></div>		
-		  </div>
-		  <a class="carousel-control left" href="#myCarousel2" data-slide="prev">&lsaquo;</a>
-		  <a class="carousel-control right" href="#myCarousel2" data-slide="next">&rsaquo;</a>
-		</div>
+<div class="row-fluid span12">
+	<ul class="thumbnails">
+		<li class="span3">
+			<div class="thumbnail">
+				<span>Image</span>
+				<div class="caption">
+					<p>por <i>Rafael Oshiro</i></p>
+				</div>
+			</div>
+		</li>
+		<li class="span3">
+			<div class="thumbnail">
+				<span>Image</span>
+				<div class="caption">
+					<p>por <i>Rafael Oshiro</i></p>
+				</div>
+			</div>
+		</li>
+		<li class="span3">
+			<div class="thumbnail">
+				<span>Image</span>
+				<div class="caption">
+					<p>por <i>Rafael Oshiro</i></p>
+				</div>
+			</div>
+		</li>
+		<li class="span3">
+			<div class="thumbnail">
+				<span>Image</span>
+				<div class="caption">
+					<p>por <i>Rafael Oshiro</i></p>
+				</div>
+			</div>
+		</li>
+	</ul>
+</div>
+{% else %}
+<div class="row separator-home">
+	<div class="span12"><center>*  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *</center></div>
+</div>
+<div class="row row-fluid">	
+	<div class="highlight-title more-to-come">
+		Muito mais nos próximos dias<br>
+		Acompanhe nosso <a href="http://ekfotoblog.wordpress.com/" class="trackable" action="homepage" label="blog-link">Blog</a>		
 	</div>	
-</div>
-<div class="show-grid">
-	<div class="span6 highlight">
-		<div id="myCarousel3" class="carousel slide">
-		  <div class="carousel-inner crop-highlights shadow">
-		    <div class="active item"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/portrait-1.jpeg"></div>
-		    <div class="item"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/portrait-2.jpeg"></div>		
-		  </div>
-		  <a class="carousel-control left" href="#myCarousel3" data-slide="prev">&lsaquo;</a>
-		  <a class="carousel-control right" href="#myCarousel3" data-slide="next">&rsaquo;</a>
-		</div>
-	</div>
-	<div class="span6 highlight">
-		<div id="myCarousel4" class="carousel slide">
-		  <div class="carousel-inner crop-highlights shadow">
-		    <div class="active item"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/baby-2.jpg"></div>			
-		    <div class="item"><img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/prototype/baby-1.jpeg"></div>
-		  </div>
-		  <a class="carousel-control left" href="#myCarousel4" data-slide="prev">&lsaquo;</a>
-		  <a class="carousel-control right" href="#myCarousel4" data-slide="next">&rsaquo;</a>
-		</div>
+	
+	<div class="facebook-likes-home">
+		<div class="fb-like-index fb-like" data-href="https://www.facebook.com/ekfoto.co" data-send="true" data-width="400"></div>
 	</div>	
+	
+</div>	
+<div class="row separator-landing">
+	<div class="span12"><center>*  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *</center></div>
 </div>
+
+{% endif %}
 {% endblock %}
 
 {% block extrascripts %}

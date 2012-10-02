@@ -10,6 +10,7 @@ var activePortfolio;
 	myapp.widget = {};
 	myapp.init = {};	
 	myapp.handler = {};
+	myapp.events = {};
 
 var __s = myapp,
 	__utils = myapp.utils,
@@ -18,6 +19,30 @@ var __s = myapp,
 	__Pusher,
 	_faceUserId,
 	_loggedInUser;
+
+(function() {
+	
+	myapp.events = {
+		track: function(action, opt_label, opt_value, opt_noninteraction) {
+			_gaq.push(['_trackEvent', action, opt_label, opt_value, opt_noninteraction]);
+			//_gaq.push(['_trackEvent', 'Videos', 'Play', 'Baby\'s First Birthday']);
+		},
+		
+		attachClickEvents: function() {
+			$('body').delegate('.trackable', 'click', function(event) {
+				event.stopPropagation();
+				var action = $(this).attr('action'),
+					optLabel = $(this).attr('label'),
+					optValue = $(this).attr('value');
+					
+				if(action && optLabel) {
+					myapp.events.track(action, optLabel, optValue, null);
+				}
+			});
+		}
+	};
+	
+})();
 
 /* Topic */
 (function() {
@@ -607,6 +632,7 @@ var __s = myapp,
 					if(data.status == "success") {
 						activePortfolio = JSON.parse(data.portfolio)[0];
 						$('.modal').modal('hide');
+						$('.welcome-message').css('display', 'none');
 						$('#img-list').empty();
 						$('#portfolioModal').modal();
 						$('#portfolio-name-label').html(activePortfolio.name);
@@ -683,6 +709,7 @@ var __s = myapp,
 	});
 
 
+	myapp.events.attachClickEvents();
 	//__utils.adjustHeight();
 
 	//$.Topic('window-resized').subscribe(__utils.adjustHeight);

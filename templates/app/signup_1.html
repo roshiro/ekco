@@ -5,27 +5,25 @@
 {% endblock %}
 
 {% block content %}
-<div class="row show-grid">
-	<div class="hero-unit span6 offset3">
-		<center>
-		<h1>Para Fotógrafos</h1>
-		<p>Tenha seu trabalho visto por milhares de pessoas. Sem Pagar nada por isso</p>
+<div class="">
+	<center>
+	<h1>Para Fotógrafos</h1>
+	<p><i>Tenha seu trabalho visto por milhares de pessoas. Sem Pagar nada por isso</i></p>
+	</center>
+	<div class="row show-grid">
+	<div class="span7 offset3" id="facebook-button">
+		<center>			
+		<a id="btn-login-facebook" class="facebook-login-button serveFacebook" href="https://www.facebook.com/dialog/oauth?client_id={{ faceAppId }}&redirect_uri={{ faceRedirectUrl }}&scope=email,user_location&state=signup">
+			<div id="serveFacebook" class="serveFacebook-fill">
+			  <img alt="Servefacebook" src="/images/serveFacebook.png">
+			  <h1><b>Conecte-se</b> com <b>Facebook</b></h1>
+			</div>
+			<img id="Servefacebook_loader" alt="Servefacebook_loader" class="serveLoading serveLoading-Facebook" src="/images/serveFacebook_loader.gif" style="display:none">
+		</a>
 		</center>
 	</div>
-</div>
-<div class="row show-grid">
-		<div class="span7 offset3" id="facebook-button">
-			<center>			
-			<a id="btn-login-facebook" class="facebook-login-button serveFacebook" href="https://www.facebook.com/dialog/oauth?client_id={{ faceAppId }}&redirect_uri={{ faceRedirectUrl }}&scope=email,user_location&state=signup">
-				<div id="serveFacebook" class="serveFacebook-fill">
-				  <img alt="Servefacebook" src="/images/serveFacebook.png">
-				  <h1><b>Conecte-se</b> com <b>Facebook</b></h1>
-				</div>
-				<img id="Servefacebook_loader" alt="Servefacebook_loader" class="serveLoading serveLoading-Facebook" src="/images/serveFacebook_loader.gif" style="display:none">
-			</a>
-			</center>
-		</div>
-</div>
+	</div>
+</div>	
 {% endblock %}
 
 {% block extrascripts %}

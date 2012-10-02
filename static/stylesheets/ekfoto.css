@@ -4,6 +4,9 @@
 html{
 	min-height:100%;
 }
+html, body {
+	height: 100%;
+}
 body.landing {
 	background:white;
 	background-image:url('/images/background.jpg');
@@ -75,6 +78,7 @@ div.border-white:hover {border: 3px solid lightblue;}
 	height: 50px;
 	padding-top: 26px;
 	text-align: center;
+	line-height: 55px;
 }
 
 .bottom-bar {
@@ -133,7 +137,9 @@ div.border-white:hover {border: 3px solid lightblue;}
 	font-style: oblique;
 	font-size: 20px;
 }
-
+.more-to-come {
+	height: 190px;
+}
 /*
 	Profile Page
 */
@@ -215,7 +221,9 @@ body.app {
 	background-color: white;
 	padding: 15px;
 }
-
+.facebook-likes-home {
+	margin-left: 300px;
+}
 /*
 	Search Page
 */
@@ -228,7 +236,8 @@ body.app {
 .search-listing .location {color: grey; font-size: 12px; font-weight: normal;}
 .more-info {font-size:12px; color: grey; margin-top: 10px;}
 
-#content {width: 960px; margin: auto;}
+#content {min-height: 100%; height: 100%; height: auto !important; width: 960px; margin: auto; margin-bottom: -60px;}
+.app #content {margin-bottom: 0;}
 
 .headline-landing {
 	font-family: 'Droid Serif', sans-serif; 
@@ -371,7 +380,10 @@ body span.messageholder {
 	border-radius: 8px; /* future proofing */
 	-khtml-border-radius: 8px; /* for old Konqueror browsers */
 }
-
+.separator-home {
+	margin: 60px 0 40px 0;
+	color: lightgrey;	
+}
 .separator-landing {
 	margin: 60px 0 80px 0;
 	color: lightgrey;
@@ -461,11 +473,12 @@ li {list-style-type: none;}
 }
 
 /* Footer */
+#footer .copyright {bottom: 10px;}
 #footer {
 	clear: both;
 	background-color: lightblue;
 	color: #606060;
-	margin-top: 40px;
+	height: 40px;
 	padding: 10px;
 	font-size: 12px;
 }

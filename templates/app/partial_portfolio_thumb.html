@@ -14,8 +14,10 @@
 			</div>
 			<div class="controls">
 				<span class="span2"><button portfolioid="{{ portfolio.key.id }}" class="btn btn-see btn-link btn-small"><i class="icon-th"></i> Ver</button><span class="label label-info">{{ portfolio.photos|length }} fotos</span></span>
-				<span class="span2"><button portfolioid="{{ portfolio.key.id }}" class="btn btn-delete btn-link btn-small"><i class="icon-remove"></i> Excluir...</button></span>
-				<span class="span2"><button portfolioid="{{ portfolio.key.id }}" class="btn btn-edit btn-link btn-small"><i class="icon-edit"></i> Editar...</button></span>
+				{% if loggedInUser %}
+					<span class="span2"><button portfolioid="{{ portfolio.key.id }}" class="btn btn-delete btn-link btn-small"><i class="icon-remove"></i> Excluir...</button></span>
+					<span class="span2"><button portfolioid="{{ portfolio.key.id }}" class="btn btn-edit btn-link btn-small"><i class="icon-edit"></i> Editar...</button></span>
+				{% endif %}
 			</div>				
 		</li>
 	</ul>

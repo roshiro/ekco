@@ -232,10 +232,13 @@ class SearchPage(webapp.RequestHandler):
 class GetUser(webapp.RequestHandler):
 	def get(self):
 		user = getLoggedInUser()
-		user = userService.getByEmail(user.email)
 		self.response.headers['Content-Type'] = 'application/json'
-		self.response.out.write(simplejson.dumps({'status': 'success', 'user': userService.getUserInJSON(user)}))
-
+		try:
+			user = userService.getByEmail(user.email)
+			self.response.out.write(simplejson.dumps({'status': 'success', 'user': userService.getUserInJSON(user)}))
+		except:
+			self.response.out.write(simplejson.dumps({'status': 'error', 'message': 'Não foi possivel pesquisar usuário.'}))
+			
 class Logout(webapp.RequestHandler):
 	def get(self):
 		session = get_current_session()
@@ -290,9 +293,6 @@ class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
 		else:
 			blob_info = blobstore.BlobInfo.get(resource)
 			self.send_blob(blob_info)
-		
-		#blob_info = blobstore.BlobInfo.get(resource)
-		#self.send_blob(blob_info)
 
 class ServeCoverHandler(blobstore_handlers.BlobstoreDownloadHandler):
 	def get(self, width, quality, resource):
@@ -337,11 +337,13 @@ def rescale(blob_key, width, height, halign='middle', valign='middle'):
 	"""
 	image_data = blobstore.fetch_data(blob_key, 0, 999999)	
 	image = images.Image(image_data)
+	
 	desired_wh_ratio = float(width) / float(height)
 	wh_ratio = float(image.width) / float(image.height)
 
 	if desired_wh_ratio > wh_ratio:
 		# resize to width, then crop to height
+		image = images.Image(blob_key=blob_key)
 		image.resize(width=int(width))
 		image.execute_transforms()
 		trim_y = (float(image.height - int(height)) / 2) / image.height
@@ -353,6 +355,7 @@ def rescale(blob_key, width, height, halign='middle', valign='middle'):
 			image.crop(0.0, trim_y, 1.0, 1 - trim_y)
 	else:
 		# resize to height, then crop to width
+		image = images.Image(blob_key=blob_key)
 		image.resize(height=int(height))
 		image.execute_transforms()
 		trim_x = (float(image.width - int(width)) / 2) / image.width

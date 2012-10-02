@@ -57,6 +57,8 @@ class Utils():
 
 class PortfolioService():
 	def save(self, obj, user):
+		user.newuser = False
+		user.put()
 		if int(obj['id']) != 0:
 			p = Portfolio.get_by_id(int(obj['id']))
 			p.name = obj['name']

@@ -26,6 +26,7 @@ class User(db.Model):
 	categories = db.ListProperty(str, default=[], indexed=True)
 	facetoken = db.StringProperty(required=False)
 	faceid = db.StringProperty(required=False)
+	newuser = db.BooleanProperty(default=True)
 	document_index_id = db.StringProperty(required=False)	
 	created_at = db.DateTimeProperty(auto_now_add=True, indexed=True)
 

@@ -2,7 +2,7 @@
 # -*- coding: latin-1 -*-
 
 ''' PROD or DEV '''
-env = 'DEV'
+env = 'PROD'
 
 if env == 'PROD':
 	FACEBOOK = {

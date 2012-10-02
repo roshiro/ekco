@@ -45,7 +45,18 @@
 	</div>
 </div>
 <div class="portfolio-wrapper">
-	<p class="title">Portfolio <button id="btn-new-portfolio" class="btn btn-link btn-small" type="button"><i class=" icon-plus-sign"></i> Novo portfólio</button></p>
+	<p class="title">Portfolio 
+		{% if loggedInUser %}
+			<button id="btn-new-portfolio" class="btn btn-link btn-small" type="button"><i class=" icon-plus-sign"></i> Novo portfólio</button>
+		{% endif %}
+	</p>
+	{% if user.newuser %}
+	<div class="alert alert-block welcome-message">
+		<button type="button" class="close" data-dismiss="alert">×</button>
+		<h4>Bem-Vindo!</h4>
+		Você ainda não criou nenhum portfolio, comece clicando no botão acima.
+	</div>
+	{% endif %}
 	{% for p in portfolios %}
 	<div class="offset2" portfolioid="{{ p.key.id }}">
 		<ul class="thumbnails">
@@ -64,8 +75,10 @@
 				</div>
 				<div class="controls">
 					<span class="span2"><button portfolioid="{{ p.key.id }}" class="btn btn-see btn-link btn-small"><i class="icon-th"></i> Ver</button> <span class="label label-info">{{ p.photos|length }} fotos</span></span>
-					<span class="span2"><button portfolioid="{{ p.key.id }}" class="btn btn-delete btn-link btn-small"><i class="icon-remove"></i> Excluir...</button></span>
-					<span class="span2"><button portfolioid="{{ p.key.id }}" class="btn btn-edit btn-link btn-small"><i class="icon-edit"></i> Editar...</button></span>
+					{% if loggedInUser %}
+						<span class="span2"><button portfolioid="{{ p.key.id }}" class="btn btn-delete btn-link btn-small"><i class="icon-remove"></i> Excluir</button></span>
+						<span class="span2"><button portfolioid="{{ p.key.id }}" class="btn btn-edit btn-link btn-small"><i class="icon-edit"></i> Editar...</button></span>
+					{% endif %}
 				</div>				
 			</li>
 		</ul>
