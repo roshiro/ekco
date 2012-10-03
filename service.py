@@ -253,7 +253,7 @@ class UserService():
 	def getInJSON(self, users):
 		response = []
 		for user in users:
-			response.append(self.getUserInJSON(user))
+			response.append(toJSON(user))
 		return response
 		
 	def getURL(self, user):

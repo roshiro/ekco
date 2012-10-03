@@ -1,57 +1,36 @@
-{% extends "_base.html" %}
+{% extends "_baseapp.html" %}
 
 {% block title %}
-	<title>Resultado da Pesquisa</title>
+	<title>Fotógrafos de Casamento</title>
 {% endblock %}
 
 {% block content %}
-<div class="row filter">
-	<div class="row show-grid" style="margin:auto;">
-		<div id="main-search-bar" class="row">
-			<div id="search-region-wrapper" class="span3 offset1">
-				Região: <select id="region-search">
-				  <option>SP</option>
-				  <option>RJ</option>
-				  <option>RS</option>
-				  <option>SC</option>
-				  <option>PR</option>
-				</select>
-			</div>
-			<div id="photo-type-wrapper" class="span5">
-				Tipo de Fotografia: <select id="photo-type-search">
-				  <option>Casamento</option>
-				  <option>Gestante</option>
-				  <option>Festas</option>
-				  <option>Moda</option>
-				  <option>Fotojornalismo</option>
-				  <option>Produto</option>
-				  <option>Still</option>			
-				</select>
-			</div>
-			<button class="btn btn-large btn-warning" type="button">Mostrar <i class="icon-white icon-search"></i></button>
-		</div>
-	</div>
+<div class="row-fluid title-search">
+	<h2>Fotógrafos de Casamento</h2>
 </div>
 <div class="row">
-	<div class="separator offset4"></div>
-</div>
-<div class="row search-label-wrapper">
-	<i class="icon-search"></i> Resultado para <strong>Retratos</strong> em <strong>SP</strong>
-</div>
-<div class="row">
+	{% for u in users %}
 	<div class="row span8 search-listing">
 		<div class="span1">
-			<a href="/photos/rafael"><img class="img-circle" src="https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-snc7/422078_10150636896899334_198408894_n.jpg"></a>
+			<a href="/photos/{{ u.username }}"><img class="img-circle" src="{{ u.avatar_thumb }}"></a>
 		</div>
 		<div class="span6">
-			<p class="name"><a href="/photos/rafael">Rafael Oshiro</a>  <span class="location">São Paulo, SP</span></p> 
-			<span class="desc">Fotógrafo profissional com mais de 10 anos de experiência em fotografia de casamento e gestantes.</span>
-			<p class="more-info">
-				<i class="icon-tags"></i> Casamento, Gestante, Moda &nbsp;&nbsp;
+			<p class="name"><a href="/photos/{{ u.username }}">{{ u.name }}</a>  <span class="location">{{ u.location }}</span></p> 
+			<span class="desc">{{ u.about }}</span>
+			<!--p class="more-info">
 				<i class="icon-camera"></i> 5 Portfolios, 60 Fotos
-			</p>
+			</p-->
 		</div>
 	</div>
+	{% endfor %}
+	{% if not users %}
+	<div class="row show-grid">
+		<div class="alert span8 offset2">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<strong>Hmmm!</strong> Nenhum fotógrafo encontrado
+		</div>
+	</div>
+	{% endif %}
 </div>
 {% endblock %}
 

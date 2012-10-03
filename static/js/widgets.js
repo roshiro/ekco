@@ -305,6 +305,7 @@ var __s = myapp,
 				type;
 				
 			if (input.files && input.files[0]) {
+				$('.btn-upload').removeClass('disabled');
 				for(var i=0; i<input.files.length; i++) {
 					reader = new FileReader(),
 					file = input.files[i],
@@ -352,14 +353,48 @@ var __s = myapp,
 			$('body').addClass('app').removeClass('home');
 	},
 	
+	_dataURItoBlob = function(dataURI) {
+	    // convert base64 to raw binary data held in a string
+	    // doesn't handle URLEncoded DataURIs
+		//var byteString = atob(dataURI.split(',')[1]);
+		var byteString;
+		if (dataURI.split(',')[0].indexOf('base64') >= 0)
+		    byteString = atob(dataURI.split(',')[1]);
+		else
+		    byteString = unescape(dataURI.split(',')[1]);
+
+	    // separate out the mime component
+	    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+	    // write the bytes of the string to an ArrayBuffer
+	    var ab = new ArrayBuffer(byteString.length);
+	    var ia = new Uint8Array(ab);
+	    for (var i = 0; i < byteString.length; i++) {
+	        ia[i] = byteString.charCodeAt(i);
+	    }
+
+	    // write the ArrayBuffer to a blob, and you're done
+	    var BlobB = (window.MozBlobBuilder || window.WebKitBlobBuilder || window.BlobBuilder);
+		var bb = new BlobB();
+	    bb.append(ab);
+	    return bb.getBlob(mimeString);
+	},
+	
+	/*
 	_dataURItoBlob = function(dataURI, type) {
-	    var binary = atob(dataURI.split(',')[1]);
+	    var binary;
+		if(dataURI.split(',')[0].indexOf('base64') >= 0) {
+			binary = atob(dataURI.split(',')[1]);
+		} else {
+			binary = unescape(dataURI.split(',')[1]);
+		}
+		
 	    var array = [];
 	    for(var i = 0; i < binary.length; i++) {
 	        array.push(binary.charCodeAt(i));
 	    }
 	    return new Blob([new Uint8Array(array)], {type: type});
-	}
+	}*/
 	
 	_uploadFiles = function(imgId, files, portfolioId, url, type) {
 		var file = _dataURItoBlob(files[0], type),
@@ -424,6 +459,10 @@ var __s = myapp,
 	};
 	
 	myapp.init =  {
+		uploadFiles: _uploadFiles,
+		
+		getUploadURL: _getUploadURL,
+		
 		homePage: function() {
 			_initAll();
 			_handleClasses(true);
@@ -659,15 +698,15 @@ var __s = myapp,
 
 			$('.btn-upload').click(function() {
 				var imgElem = $('#img-list .img-preview:not(.completed)');
-
+				$(this).addClass('disabled');
 				for(var i=0; i<imgElem.length; i++) {
-					var	actionUrl = _getUploadURL(user.username),
+					var	actionUrl = myapp.init.getUploadURL(user.username),
 						files = [imgElem[i].src],
 						imgId = $(imgElem[i]).attr('id'),
 						mimetype = $(imgElem[i]).attr('type');
 
 					if(files && files.length > 0) {
-						_uploadFiles(imgId, files, activePortfolio.id, actionUrl, mimetype);	
+						myapp.init.uploadFiles(imgId, files, activePortfolio.id, actionUrl, mimetype);	
 					} else {
 						alert('Selecione alguma foto para upload');
 					}					
@@ -698,7 +737,7 @@ var __s = myapp,
 					$('#user-name').html(user.name);
 					$('#user-about').html(user.about);
 					if(user.website) {
-						var elems = "<a id='user-website' href='"+user.webite+"' target='_blank'>"+user.website+"</a>";
+						var elems = "<a id='user-website' href='"+user.website+"' target='_blank'>"+user.website+"</a>";
 						$('.website').empty().append(elems);
 					} else {
 						$('#user-website').remove();

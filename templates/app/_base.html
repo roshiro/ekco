@@ -85,7 +85,8 @@
 				<!-- All the pages -->
 				<div class="controls-header round shadow">
 				{% if isLoggedIn %}
-					<a href="/photos/{{ loggedInUser.username }}"><i class="icon-home"></i> Minha página</a>				
+					<a href="/explore"><i class="icon-heart"></i> Explore</a>
+					<a href="/photos/{{ loggedInUser.username }}"><i class="icon-home"></i> Minha página</a>
 					<a href="#" id="edit-profile-link"><i class="icon-wrench"></i> Editar</a>
 					<a href="/logout"><i class="icon-off"></i> Logout</a>
 				{% else %}
@@ -144,6 +145,6 @@
 	{% block extrascripts %}
 	
 	{% endblock %}
-	
+	<script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
 </body>
 </html>

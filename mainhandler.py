@@ -30,6 +30,10 @@ userService = UserService()
 facebookService = FacebookService()
 portfolioService = PortfolioService()
 
+def isMyPage(userTryingToAccess):
+	loggedUser = getLoggedInUser()
+	return loggedUser and loggedUser.key().id() == userTryingToAccess.key().id()
+	
 def isLoggedIn():
 	session = get_current_session()
 	if session.has_key('profile'):
@@ -208,11 +212,14 @@ class ProfilePage(webapp.RequestHandler):
 		loggedUser = getLoggedInUser()
 		user = userService.get(username)
 		portfolios = portfolioService.getPortfolios(user)
-		template_values = {'isLoggedIn': isLoggedIn(), 
+		template_values = {
+			'isLoggedIn': isLoggedIn(), 
 			'loggedInUser': loggedUser, 
 			'user': user, 
 			'portfolios': portfolios,
-			'faceAppId': FACEBOOK["appId"]}
+			'faceAppId': FACEBOOK["appId"],
+			'isMyPage': isMyPage(user)
+		}
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'profile.html')	
 		self.response.out.write(template.render(path, template_values))
 
@@ -226,8 +233,13 @@ class UpdateUser(webapp.RequestHandler):
 
 class SearchPage(webapp.RequestHandler):
 	def get(self):
+		users = User.all().fetch(100)
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'search.html')	
-		self.response.out.write(template.render(path, {}))				
+		self.response.out.write(template.render(path, {
+			'users': users,
+			'loggedInUser': getLoggedInUser(),
+			'isLoggedIn': isLoggedIn()
+		}))				
 
 class GetUser(webapp.RequestHandler):
 	def get(self):
@@ -392,16 +404,30 @@ class DeletePortfolio(webapp.RequestHandler):
 class PartialPortfolio(webapp.RequestHandler):
 	def get(self, portfolio_id):
 		portfolio = portfolioService.getPortfolio(portfolio_id)
+		loggedUser = getLoggedInUser()
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'partial_portfolio_thumb.html')	
-		self.response.out.write(template.render(path, {'portfolio': portfolio}))
-
+		self.response.out.write(template.render(path, {'portfolio': portfolio, 
+			'isLoggedIn': isLoggedIn(), 
+			'loggedInUser': loggedUser,
+			'isMyPage': isMyPage(portfolio.user),
+			'user': portfolio.user}))
+			
 class EditPortfolio(webapp.RequestHandler):
 	def get(self, portfolio_id):
 		portfolio = portfolioService.getPortfolio(portfolio_id)
-		user = User.get_by_id(portfolio.user.key().id())
-		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'portfolio_edit.html')	
-		self.response.out.write(template.render(path, {'user': user, 'isLoggedIn': isLoggedIn(), 'loggedInUser': getLoggedInUser(), 'portfolio': portfolio}))
-
+		user = portfolio.user
+		loggedUser = getLoggedInUser()
+		if isMyPage(portfolio.user):
+			path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'portfolio_edit.html')	
+			self.response.out.write(template.render(path, {
+				'user': user, 
+				'isLoggedIn': isLoggedIn(), 
+				'loggedInUser': loggedUser, 
+				'portfolio': portfolio
+			}))
+		else:
+			self.redirect('/photos/'+user.username)
+			
 class PhotoDelete(webapp.RequestHandler):
 	def post(self, portfolio_id, photo):
 		user = getLoggedInUser()
@@ -459,7 +485,7 @@ application = webapp.WSGIApplication([
 									   	('/', LandingPage),
 										('/home', Home),
 										('/homepage', HomePage),
-										('/search', SearchPage),
+										('/explore', SearchPage),
 										('/logout', Logout),
 										('/sobre', AboutPage),
 										('/contato', ContactPage),

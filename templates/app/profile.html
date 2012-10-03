@@ -29,7 +29,7 @@
 		</p>
 		<p class="website">
 			{% if user.website %}
-				<a id="user-website" href="http://www.oshiwall.com/" target="_blank">{{ user.website }}</a>
+				<a id="user-website" href="{{ user.website }}" target="_blank">{{ user.website }}</a>
 			{% else %}
 				<small>Seu website aqui...</small>
 			{% endif %}
@@ -42,12 +42,17 @@
 	</div>
 	<div class="contact-wrapper span4">
 		<button class="btn btn-large btn btn-warning btn-contact-me" type="button">Entre em Contato  <i class="icon-white icon-comment"></i></button>
+		<div class="fb-like fb-like-profile" data-href="/photos/{{ user.username }}" data-send="true" data-layout="button_count" data-width="200" data-show-faces="false" data-font="trebuchet ms"></div>		
+		<!-- Place this tag where you want the +1 button to render. -->
+		<div class="g-plusone" data-size="medium" data-annotation="inline" data-width="152"></div> <br>
+		<a href="https://twitter.com/share" class="twitter-share-button tweet-profile" data-url="http://ek-foto.co/photos/{{ user.username }}" data-text="Inspiração para fotografia de casamento" data-via="ekfotoco" data-lang="pt" data-related="ekfotoco" data-count="none" data-hashtags="ekfoto">Tweetar</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>		
 	</div>
 </div>
 <div class="portfolio-wrapper">
 	<p class="title">Portfolio 
-		{% if loggedInUser %}
-			<button id="btn-new-portfolio" class="btn btn-link btn-small" type="button"><i class=" icon-plus-sign"></i> Novo portfólio</button>
+		{% if isMyPage %}
+			<button id="btn-new-portfolio" class="btn btn-link btn-small" type="button"><i class=" icon-plus-sign"></i> Novo portfólio </button>
 		{% endif %}
 	</p>
 	{% if user.newuser %}
@@ -66,7 +71,7 @@
 						{% if p.cover %}
 							<img class="img-rounded" src="/serve/{{ p.cover }}?width=628&height=182&quality=70">
 						{% else %}
-							
+							<img class="img-rounded" src="http://commondatastorage.googleapis.com/ekfotoco/assets/nocover.png">
 						{% endif %}
 					</a>
 					<div class="label-overlay">
@@ -75,7 +80,7 @@
 				</div>
 				<div class="controls">
 					<span class="span2"><button portfolioid="{{ p.key.id }}" class="btn btn-see btn-link btn-small"><i class="icon-th"></i> Ver</button> <span class="label label-info">{{ p.photos|length }} fotos</span></span>
-					{% if loggedInUser %}
+					{% if loggedInUser and isMyPage %}
 						<span class="span2"><button portfolioid="{{ p.key.id }}" class="btn btn-delete btn-link btn-small"><i class="icon-remove"></i> Excluir</button></span>
 						<span class="span2"><button portfolioid="{{ p.key.id }}" class="btn btn-edit btn-link btn-small"><i class="icon-edit"></i> Editar...</button></span>
 					{% endif %}
