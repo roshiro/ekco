@@ -238,7 +238,7 @@ class UpdateUser(webapp.RequestHandler):
 
 class SearchPage(webapp.RequestHandler):
 	def get(self):
-		users = User.all().filter('active =', True).fetch(100)
+		users = User.all().fetch(100)
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'search.html')	
 		self.response.out.write(template.render(path, {
 			'users': users,
