@@ -50,12 +50,8 @@
 	</div>
 </div>
 <div class="portfolio-wrapper">
-	<p class="title">Portfolio 
-		{% if isMyPage %}
-			<button id="btn-new-portfolio" class="btn btn-link btn-small" type="button"><i class=" icon-plus-sign"></i> Novo portfólio </button>
-		{% endif %}
-	</p>
-	{% if user.newuser %}
+	<div id="partial-add-link"></div>
+	{% if loggedInUser and isMyPage and user.newuser %}
 	<div class="alert alert-block welcome-message">
 		<button type="button" class="close" data-dismiss="alert">×</button>
 		<h4>Bem-Vindo!</h4>
@@ -118,5 +114,5 @@
 {% endblock %}
 
 {% block extrascripts %}
-<script>myapp.init.profilePage();</script>
+<script>myapp.init.profilePage('{{ user.username }}');</script>
 {% endblock %}

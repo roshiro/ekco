@@ -1,0 +1,13 @@
+<p class="title">Portfolio 
+	{% if isMyPage %}
+		{% if showUpgradeMessage %}
+			<button id="btn-upgrade" class="btn btn-link btn-small" type="button">
+				Crie mais portfolios por apenas <strong>R$8,00 por mês</strong>
+			</button>
+		{% else %}
+		<button id="btn-new-portfolio" class="btn btn-link btn-small" type="button">
+			<i class=" icon-plus-sign"></i> Novo portfólio 
+		</button>
+		{% endif %}
+	{% endif %}
+</p>

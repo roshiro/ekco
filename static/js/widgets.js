@@ -306,13 +306,17 @@ var __s = myapp,
 				
 			if (input.files && input.files[0]) {
 				$('.btn-upload').removeClass('disabled');
+				$('.alert').remove();
 				for(var i=0; i<input.files.length; i++) {
 					reader = new FileReader(),
 					file = input.files[i],
 					filename = file.name,
 					size = file.size,
 					type = file.type;
-
+					if(size > 5*1024*1024) {
+						alert('Tamanho máximo é 5 mb.');
+						break;
+					}
 					reader.onload = (function(theFile) {
 						return function (e) {
 							var obj = _createPreview(theFile.name),
@@ -403,6 +407,7 @@ var __s = myapp,
 	    //xhr.file = file; // not necessary if you create scopes like this
 		formData.append('file', file);
 		formData.append('portfolio_id', portfolioId);
+		$('.img-wrapper-id-'+imgId+' .label_status').html('Aguarde...');
 		
 	    xhr.addEventListener('progress', (function(imgId) {
 			return function(e) {
@@ -410,7 +415,7 @@ var __s = myapp,
 					percentage = (Math.floor(done/total*1000)/10);
 				
 				$('.img-wrapper-id-'+imgId+' .bar').css('width', percentage+'%');
-		        console.log('xhr progress: ' + percentage + '%');
+		        //console.log('xhr progress: ' + percentage + '%');
 		    }})(imgId)
 		, false);
 	
@@ -422,7 +427,7 @@ var __s = myapp,
 						percentage = (Math.floor(done/total*1000)/10);
 						
 					$('.img-wrapper-id-'+imgId+' .bar').css('width', percentage+'%');
-		            console.log(imgId + ' xhr.upload progress: ' + done + ' / ' + total + ' = ' + (Math.floor(done/total*1000)/10) + '%');
+		            //console.log(imgId + ' xhr.upload progress: ' + done + ' / ' + total + ' = ' + (Math.floor(done/total*1000)/10) + '%');
 		    	};
 			})(imgId);
 	    }
@@ -566,7 +571,20 @@ var __s = myapp,
 			});	
 		},
 
-		profilePage: function() {
+		loadAddPhotosLink: function(username) {
+			$.get('/partial/addphotolink/'+username, function(content) {
+				$('#partial-add-link').html(content);
+				
+				$('#btn-new-portfolio').click(function(event) {
+					event.stopPropagation();
+					activePortfolio = undefined;
+					$('#input-portfolio-name').attr('value', "");
+					$("#portfolioName").modal();
+				});
+			});
+		},
+
+		profilePage: function(username) {
 			_initAll();
 			_handleClasses(false);
 			
@@ -579,12 +597,7 @@ var __s = myapp,
 				}
 			});
 			
-			$('#btn-new-portfolio').click(function(event) {
-				event.stopPropagation();
-				activePortfolio = undefined;
-				$('#input-portfolio-name').attr('value', "");
-				$("#portfolioName").modal();
-			});
+			myapp.init.loadAddPhotosLink(username);
 			
 			$('.portfolio-wrapper').delegate("button", "click", function() {
 				var isSee = $(this).hasClass('btn-see'),
@@ -599,6 +612,7 @@ var __s = myapp,
 						if(data && data.status == 'success') {
 							$('div[portfolioid='+portfolioId+']').fadeOut('slow', function() {
 								$(this).remove();
+								myapp.init.loadAddPhotosLink(user.username);
 							});
 						}
 					});
@@ -619,6 +633,7 @@ var __s = myapp,
 						$('.portfolio-wrapper').append(content);
 					}
 				});
+				myapp.init.loadAddPhotosLink(user.username);
 			});
 			
 			$('.btn-contact-me').click(function(event) {

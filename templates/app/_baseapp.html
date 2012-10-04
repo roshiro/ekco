@@ -83,7 +83,10 @@
 			<div class="right-header right" class="span2">
 				<!-- All the pages -->
 				<div class="controls-header  round shadow">
-				{% if isLoggedIn %}			
+				{% if isLoggedIn %}
+					{% if showUpgradeMessage %}
+						<a href="/upgrade" class="upgrade-link">Muito mais por apensa R$8 por mês</a>
+					{% endif %}
 					<a href="/explore"><i class="icon-heart"></i> Explore</a>
 					<a href="/photos/{{ loggedInUser.username }}"><i class="icon-home"></i> Minha página</a>				
 					<a href="#" id="edit-profile-link"><i class="icon-wrench"></i> Editar</a>

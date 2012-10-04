@@ -15,9 +15,9 @@
 				<label class="control-label" for="inputAbout">Sobre você *</label>
 				<div class="controls">
 					{% if user.about %}
-						<textarea type="text" id="inputAbout" placeholder="Sobre você" value="{{ user.about }}"></textarea>
+						<textarea type="text" id="inputAbout" class="input-xlarge" placeholder="Sobre você" rows="5" value="{{ user.about }}"></textarea>
 					{% else %}
-						<textarea type="text" id="inputAbout" placeholder="Sobre você" value=""></textarea>
+						<textarea type="text" id="inputAbout" class="input-xlarge" placeholder="Sobre você" rows="5" value=""></textarea>
 					{% endif %}
 				</div>
 			</div>

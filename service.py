@@ -98,6 +98,7 @@ class PortfolioService():
 		for index in blob_keys:
 			logging.debug('Removing photo %s from portfolio %s', index, p.key().id())	
 			p.photos.remove(index)
+			p.put()
 			blobstore.delete(index)
 			if p.cover == index:
 				logging.debug('Cover set to None')

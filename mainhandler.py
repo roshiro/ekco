@@ -30,6 +30,9 @@ userService = UserService()
 facebookService = FacebookService()
 portfolioService = PortfolioService()
 
+def showUpgradeMessage(user, portfolios):
+	return (not user.membership and int(user.membership) == 0) and len(portfolios) == 1
+
 def isMyPage(userTryingToAccess):
 	loggedUser = getLoggedInUser()
 	return loggedUser and loggedUser.key().id() == userTryingToAccess.key().id()
@@ -212,13 +215,15 @@ class ProfilePage(webapp.RequestHandler):
 		loggedUser = getLoggedInUser()
 		user = userService.get(username)
 		portfolios = portfolioService.getPortfolios(user)
+		upgradeMsg = showUpgradeMessage(user, portfolios)
 		template_values = {
 			'isLoggedIn': isLoggedIn(), 
 			'loggedInUser': loggedUser, 
 			'user': user, 
 			'portfolios': portfolios,
 			'faceAppId': FACEBOOK["appId"],
-			'isMyPage': isMyPage(user)
+			'isMyPage': isMyPage(user),
+			'showUpgradeMessage': upgradeMsg
 		}
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'profile.html')	
 		self.response.out.write(template.render(path, template_values))
@@ -233,7 +238,7 @@ class UpdateUser(webapp.RequestHandler):
 
 class SearchPage(webapp.RequestHandler):
 	def get(self):
-		users = User.all().fetch(100)
+		users = User.all().filter('active =', True).fetch(100)
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'search.html')	
 		self.response.out.write(template.render(path, {
 			'users': users,
@@ -418,12 +423,14 @@ class EditPortfolio(webapp.RequestHandler):
 		user = portfolio.user
 		loggedUser = getLoggedInUser()
 		if isMyPage(portfolio.user):
+			upgradeMsg = showUpgradeMessage(user, portfolioService.getPortfolios(user))
 			path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'portfolio_edit.html')	
 			self.response.out.write(template.render(path, {
 				'user': user, 
 				'isLoggedIn': isLoggedIn(), 
 				'loggedInUser': loggedUser, 
-				'portfolio': portfolio
+				'portfolio': portfolio,
+				'showUpgradeMessage': upgradeMsg
 			}))
 		else:
 			self.redirect('/photos/'+user.username)
@@ -471,6 +478,27 @@ class PartialEditProfile(webapp.RequestHandler):
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'partial_edit_profile.html')	
 		self.response.out.write(template.render(path, {}))
 
+class DeleteUser(webapp.RequestHandler):
+	def post(self):
+		return
+
+class PartialAddPhotosLink(webapp.RequestHandler):
+	def get(self, username):
+		loggedUser = getLoggedInUser()
+		user = userService.get(username)
+		portfolios = portfolioService.getPortfolios(user)
+		upgradeMsg = showUpgradeMessage(user, portfolios)
+		template_values = {
+			'isLoggedIn': isLoggedIn(), 
+			'loggedInUser': loggedUser, 
+			'user': user, 
+			'portfolios': portfolios,
+			'isMyPage': isMyPage(user),
+			'showUpgradeMessage': upgradeMsg
+		}
+		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'partial_add_photos_link.html')
+		self.response.out.write(template.render(path, template_values))
+
 class AboutPage(webapp.RequestHandler):
 	def get(self):
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'about.html')	
@@ -495,6 +523,7 @@ application = webapp.WSGIApplication([
 										('/signup/confirmation', SignupThanksPage),
 										('/photos/([^/]+)?', ProfilePage),
 										('/user/update', UpdateUser),
+										('/user/delete/username', DeleteUser),
 										('/getuser', GetUser),
 										('/getuploadurl/([^/]+)?', GenerateUploadUrl),
 										('/upload', UploadHandler),
@@ -505,6 +534,7 @@ application = webapp.WSGIApplication([
 										('/photos/delete/([^/]+)?/([^/]+)?', PhotoDelete),
 										('/partial/portfolio/([^/]+)?', PartialPortfolio),
 										('/partial/addphotos', PartialAddPhotos),
+										('/partial/addphotolink/([^/]+)?', PartialAddPhotosLink),
 										('/partial/editprofile', PartialEditProfile),
 										('/portfolio/edit/([^/]+)?', EditPortfolio),
 										('/portfolio/([^/]+)?', FullPortfolio),
