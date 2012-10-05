@@ -168,6 +168,7 @@ div.border-white:hover {border: 3px solid lightblue;}
 	height: 20px;
 	margin-left: 4px;
 }
+#btn-upgrade {font-family: Helvetica, arial; color: black;}
 .tweet-profile {margin: 10px 90px 0 0;}
 .fb-like-profile {margin: 30px 14px 15px 14px;}
 .portfolio-wrapper .controls span {text-align: center;}

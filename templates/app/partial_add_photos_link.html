@@ -1,11 +1,11 @@
 <p class="title">Portfolio 
 	{% if isMyPage %}
 		{% if showUpgradeMessage %}
-			<button id="btn-upgrade" class="btn btn-link btn-small" type="button">
+			<a id="btn-upgrade" href="/upgrade/{{loggedInUser.username}}" class="btn btn-link btn-small trackable" action="profile" label="upgrade" type="button">
 				Crie mais portfolios por apenas <strong>R$8,00 por mês</strong>
-			</button>
+			</a>
 		{% else %}
-		<button id="btn-new-portfolio" class="btn btn-link btn-small" type="button">
+		<button id="btn-new-portfolio" class="btn btn-link btn-small trackable" action="profile" label="create-portfolio-link" type="button">
 			<i class=" icon-plus-sign"></i> Novo portfólio 
 		</button>
 		{% endif %}
