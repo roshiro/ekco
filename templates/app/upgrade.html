@@ -1,0 +1,78 @@
+{% extends "_baseapp.html" %}
+
+{% block title %}
+	<title>Aumente seu plano por R$8,00</title>
+{% endblock %}
+
+{% block content %}
+<div class="upgrade">
+	<center><h1>Você sabia que "fotografia de casamento" é o termo mais procurado no Google Brasil?</h1></center>
+	
+	<p class="sub-highlight">Existem milhares de fotógrafos amadores hoje em dia, por isso você precisa se diferenciar e agregar mais valor ao seu trabalho. Um portfolio de qualidade <strong>valoriza seu trabalho</strong> e faz com que seus clientes fiquem satisfeitos na hora de pagar.</p>
+	
+	<h4 class="planinfo">Veja as vantagens do nosso plano...</h4>
+	<div class="plans-wrapper round shadow2">
+		<table>
+			<thead>
+				<tr>
+					<th></th>
+					<th>Plano Free</th>
+					<th>Plano Plus</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Quantidade de portfolios</td>
+					<td class="col2">1</td>
+					<td class="col3">10</td>
+				</tr>
+				<tr>
+					<td>Quantidade de fotos por portfolio</td>
+					<td class="col2">15</td>
+					<td class="col3">20</td>
+				</tr>
+				<tr>
+					<td>Suas fotos em Destaque na Homepage</td>
+					<td class="col2">Não</td>
+					<td class="col3">Yeahh!</td>
+				</tr>		
+				<tr>
+					<td>Melhor colocação nas pesquisas</td>
+					<td class="col2">Não</td>
+					<td class="col3">Yeahh!</td>
+				</tr>
+			</tbody>
+			<tfooter>
+				<tr>
+					<td></td>
+					<td class="col2">Free</td>
+					<td class="col3"><strong>R$ 8,00/mês</strong></td>
+				</tr>				
+				<tr>
+					<td></td>
+					<td class="col2"></td>
+					<td class="col3"><a target="NEW" href="mailto:bruna.oshiro@ek-foto.co?Subject=Atualizar%20Plano&body=Gostaria de contratar o plano plus por 1 mês. Meu email é {{loggedInUser.email}}. Obrigado" class="btn btn-success trackable" action="upgrade" label="contract-link">Contratar</a></td>
+				</tr>			
+			</tfooter>
+		</table>
+	</div>
+	
+	<h4 class="planinfo">... e como é símples e seguro contratá-lo!</h4>
+	<ul class="stepsToContract">
+		<li>1. Clique no botão Contratar, isso enviará um email para nós informando sua atualização de plano;</li>
+		<li>2. Em no máximo 1 hora lhe enviaremos um link para você efetuar o pagamento;</li>
+		<li>3. Após verificarmos o seu pagamento no sistema, você receberá um email do Ek Foto confirmando seu plano</li>
+		<li>4. <strong>Pronto!</strong> Comece a usufruir de todos os benefícios do Ek Foto</li>
+	</ul>
+	
+	<p class="contact">
+	Entre em contato para qualquer dúvida ou esclarecimento<br>
+	Bruna: <a href="mailto:bruna.oshiro@ek-foto.co?Subject=Atualizar%20Plano">bruna.oshiro@ek-foto.co</a><br>
+	Rafael: <a href="mailto:rafael.oshiro@ek-foto.co?Subject=Atualizar%20Plano">rafael.oshiro@ek-foto.co</a><br>
+	</p>
+</div>	
+{% endblock %}
+
+{% block extrascripts %}
+<script>myapp.init.upgradePage();</script>
+{% endblock %}

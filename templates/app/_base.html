@@ -15,6 +15,8 @@
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="content-language" content="pt-br">	
 	<meta name="author" content="Ek Foto">
+	<meta name="description" content="Fotografia e Inspiração para seu Casamento">	
+	<meta name="keywords" content="Fotografia, Inspiração, Casamento, fotografia de casamento, fotografos">		
 	{% block metadescription %}
     {% endblock %}		
 	<meta name="robots" content="index,follow">
@@ -75,7 +77,7 @@
 	
 	<div id="content" class="content">
 		<div class="row" id="header">
-			<div class="span2"><a href="/homepage"><img class="header-logo" src="/images/logo.png"></a></div>
+			<div class="span2"><a href="/"><img class="header-logo" src="/images/logo.png"></a></div>
 
 			<div class="span7 top-slogan">
 				{% block header-middle %}			
@@ -85,10 +87,10 @@
 				<!-- All the pages -->
 				<div class="controls-header round shadow">
 				{% if isLoggedIn %}
-					<a href="/explore"><i class="icon-heart"></i> Explore</a>
-					<a href="/photos/{{ loggedInUser.username }}"><i class="icon-home"></i> Minha página</a>
-					<a href="#" id="edit-profile-link"><i class="icon-wrench"></i> Editar</a>
-					<a href="/logout"><i class="icon-off"></i> Logout</a>
+					<a href="/explore" class="trackable" action="homepage" label="explore-link"><i class="icon-heart"></i> Explore</a>
+					<a href="/photos/{{ loggedInUser.username }}" class="trackable" action="homepage" label="my-profile-link"><i class="icon-home"></i> Minha página</a>
+					<a href="#" id="edit-profile-link" class="trackable" action="homepage" label="edit-link"><i class="icon-wrench"></i> Editar</a>
+					<a href="/logout" class="trackable" action="homepage" label="logout-link"><i class="icon-off"></i> Logout</a>
 				{% else %}
 					<div class="signup-link"><a href="/signup" class="trackable" action="homepage" label="photographer-link">Fotógrafo? Clique aqui!</a></div>
 				{% endif %}
@@ -102,29 +104,6 @@
 		<div class="row">
 			{% block content %}
 			{% endblock %}
-		</div>
-		<!--div class="feedback" data-toggle="modal" data-target="#feedbackModal"></div-->
-		<div id="feedbackModal" class="modal hide fade">
-		  <div class="modal-body">
-			<h2 class="name">Adoramos seu feedback!</h2>
-			<p>Qual nota nós merecemos?</p>
-			<p><div class="btn-toolbar" style="margin: 0;">
-				<div class="btn-group">
-					<button class="btn">Ótimo</button>
-					<button class="btn">Bom</button>
-					<button class="btn">Médio</button>
-					<button class="btn">Ruim</button>
-				</div>
-			</div></p>
-			<p>Seu comentário</p>
-			<textarea id="comment-feedback" style="width: 360px" rows="5" placeholder="Escreva aqui criticas, sugestões, elogios..."></textarea>
-			<p>Email: (opcional)</p>
-			<input type="text" id="email-feedback" placeholder="email">
-			<p>
-				<button class="btn btn-primary close-modal" type="button">Enviar</button>
-				<button class="btn btn-link close-modal close-modal" type="button">Cancelar</button>
-			</p>			
-		  </div>
 		</div>
 		<div id="partial-edit-profile"></div>
 	</div>

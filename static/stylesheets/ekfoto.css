@@ -258,6 +258,19 @@ body.app {
 }
 
 /*
+	Upgrade Page
+*/
+.upgrade {color: #404040; margin: 10px 28px;}
+.upgrade .sub-highlight {font-size: 18px; line-height: 25px; margin: 30px 0; color: #505050;}
+.upgrade .planinfo {color: goldenrod; text-align: center;}
+.upgrade .plans-wrapper {margin: auto; background-color: lightYellow; width: 540px; padding: 5px;}
+.upgrade table {margin: auto; margin-top: 20px; margin-bottom: 20px;}
+.upgrade table .col2, 
+.upgrade table .col3 {text-align: center; width: 110px;}
+.upgrade table .col3 {color: blue;}
+.upgrade .contact {margin: 50px 0 0 0;font-style: italic;}
+.upgrade .stepsToContract {width: 700px; margin-left: 100px;}
+/*
 	Search Page
 */
 .search-label-wrapper {margin-bottom: 20px;}
@@ -272,7 +285,7 @@ body.app {
 #content {min-height: 100%; height: 100%; height: auto !important; width: 960px; margin: auto; margin-bottom: 0px;}
 .app #content {margin-bottom: 0px;}
 .title-search h2 {
-	font-family: Niconne;
+	font-family: Niconne, cursive;
 	font-size: 30px;
 	text-align: center;
 	color: #404040;

@@ -74,7 +74,7 @@
 	
 	<div id="content" class="content">
 		<div class="row" id="header">
-			<div class="span2"><a href="/homepage"><img class="header-logo" src="/images/logo.png"></a></div>
+			<div class="span2"><a href="/"><img class="header-logo" src="/images/logo.png"></a></div>
 
 			<div class="span7 top-slogan">
 				{% block header-middle %}			
@@ -85,12 +85,12 @@
 				<div class="controls-header  round shadow">
 				{% if isLoggedIn %}
 					{% if showUpgradeMessage %}
-						<a href="/upgrade" class="upgrade-link">Muito mais por apensa R$8 por mês</a>
+						<a href="/upgrade/{{loggedInUser.username}}" class="upgrade-link trackable" action="app" label="upgrade-link">Muito mais por apensa R$8 por mês</a>
 					{% endif %}
-					<a href="/explore"><i class="icon-heart"></i> Explore</a>
-					<a href="/photos/{{ loggedInUser.username }}"><i class="icon-home"></i> Minha página</a>				
-					<a href="#" id="edit-profile-link"><i class="icon-wrench"></i> Editar</a>
-					<a href="/logout"><i class="icon-off"></i> Logout</a>
+					<a href="/explore"><i class="icon-heart trackable" action="app" label="explore-link"></i> Explore</a>
+					<a href="/photos/{{ loggedInUser.username }}" class="trackable" action="app" label="my-profile-link"><i class="icon-home"></i> Minha página</a>				
+					<a href="#" id="edit-profile-link" class="trackable" action="app" label="edit-link"><i class="icon-wrench"></i> Editar</a>
+					<a href="/logout" class="trackable" action="app" label="lougout-link"><i class="icon-off"></i> Logout</a>
 				{% else %}
 					<div class="signup-link"><a href="/signup" class="trackable" action="app" label="photographer-link">Fotógrafo? Clique aqui!</a></div>
 				{% endif %}

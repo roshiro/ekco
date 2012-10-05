@@ -22,6 +22,7 @@ from gaesessions import get_current_session
 from google.appengine.api import taskqueue
 from google.appengine.ext.db import Key
 from google.appengine.api import images
+from google.appengine.api import mail
 
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
@@ -48,6 +49,26 @@ def getLoggedInUser():
 		session = get_current_session()
 		return session['profile']
 	return None
+
+def sendMailUpgrade(data):
+	mail.send_mail(sender=data.sender_name + " <" + data.sender_email + ">",
+	              to=data.to_name + " <" + data.to_email + ">",
+	              subject=data.subject,
+	              body="""
+	Parabéns, """ + data.to_name + """
+
+	Você optou por contratar o plano plus do Ek Foto, por 1 mês no valor de R$8,00.
+	No período de até 1 hora você vai receber um link do Mercado Pago para efetuar o 
+	pagamento e após o pagamento ser efetuado, sua conta será ativada e você receberá
+	um email de confirmação de ativação da sua conta.
+	
+	Caso tenha alguma dúvida, responda esse email.
+
+	Obrigado
+	Rafael Oshiro, Ek Foto
+	""")
+	logging.debug('%s', data)
+	return
 
 class Home(webapp.RequestHandler):
 	def get(self):
@@ -454,6 +475,12 @@ class PhotoDelete(webapp.RequestHandler):
 			self.response.headers['Content-Type'] = 'application/json'
 			self.response.out.write(simplejson.dumps({'status': 'error', 'message': 'user not authorized'}))
 
+class GetUserJson(webapp.RequestHandler):
+	def get(self, username):
+		user = userService.get(username)
+		self.response.headers['Content-Type'] = 'application/json'
+		self.response.out.write(simplejson.dumps({'status': 'success', 'user': toJSON(user)}))
+
 class JsonGetPorfolio(webapp.RequestHandler):
 	def get(self, portfolio_id):
 		portfolio = portfolioService.getPortfolio(portfolio_id)
@@ -482,6 +509,20 @@ class DeleteUser(webapp.RequestHandler):
 	def post(self):
 		return
 
+class GetPhotosLeft(webapp.RequestHandler):
+	def get(self, portfolio_id):
+		portfolio = portfolioService.getPortfolio(portfolio_id)
+		membership = int(portfolio.user.membership)
+		numleft = 0
+		if membership == 0:
+			num = len(portfolio.photos)
+			numleft = 15 - num
+		elif membership == 1:
+			num = len(portfolio.photos)
+			numleft = 20 - num		
+		self.response.headers['Content-Type'] = 'application/json'
+		self.response.out.write(simplejson.dumps({'status': 'success', 'result': numleft}))
+
 class PartialAddPhotosLink(webapp.RequestHandler):
 	def get(self, username):
 		loggedUser = getLoggedInUser()
@@ -509,8 +550,34 @@ class ContactPage(webapp.RequestHandler):
 		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'contact.html')	
 		self.response.out.write(template.render(path, {'isLoggedIn': isLoggedIn(), 'loggedInUser': getLoggedInUser()}))		
 
+class ContractPlan(webapp.RequestHandler):
+	def get(self):
+		loggedInUser = getLoggedInUser()
+		loggedIn = isLoggedIn()
+		sendMailUpgrade({'sender_name': 'Bruna Oshiro', 
+			'sender_email': 'bruna.oshiro@ek-foto.co', 
+			'to_name': loggedInUser.name,
+			'to_email': loggedInUser.email,
+			'subject': 'Ek Foto - atualização de plano' })
+		self.response.headers['Content-Type'] = 'application/json'
+		self.response.out.write(simplejson.dumps({'status': 'success'}))
+
+class UpgradePage(webapp.RequestHandler):
+	def get(self, username):
+		loggedInUser = getLoggedInUser()
+		loggedIn = isLoggedIn()
+		if loggedIn and username == loggedInUser.username:
+			template_values = {
+				'isLoggedIn': loggedIn,
+				'loggedInUser': loggedInUser
+			}
+			path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'upgrade.html')	
+			self.response.out.write(template.render(path, template_values))
+		else:
+			self.redirect('/')
+
 application = webapp.WSGIApplication([
-									   	('/', LandingPage),
+									   	('/', HomePage),
 										('/home', Home),
 										('/homepage', HomePage),
 										('/explore', SearchPage),
@@ -519,13 +586,17 @@ application = webapp.WSGIApplication([
 										('/contato', ContactPage),
 										('/facebookauth', AuthFacebook),
 										('/prototype', Prototype),
+										('/upgrade/([^/]+)?', UpgradePage),
 										('/signup', SignupPage),
 										('/signup/confirmation', SignupThanksPage),
 										('/photos/([^/]+)?', ProfilePage),
 										('/user/update', UpdateUser),
 										('/user/delete/username', DeleteUser),
+										('/user/contract', ContractPlan),
 										('/getuser', GetUser),
+										('/getuserjson/([^/]+)?', GetUserJson),
 										('/getuploadurl/([^/]+)?', GenerateUploadUrl),
+										('/getphotosleft/([^/]+)?', GetPhotosLeft),
 										('/upload', UploadHandler),
 										('/serve/([^/]+)?', ServeHandler),
 										('/servecover/([^/]+)?/([^/]+)?/([^/]+)?', ServeCoverHandler),

@@ -639,14 +639,24 @@ var __s = myapp,
 			$('.btn-contact-me').click(function(event) {
 				event.stopPropagation();
 				$("#contactModal").modal();
-				$('#contactModal .name').html(_loggedInUser.name);
-				$('#contactModal .email').html(_loggedInUser.email);
-				$('#contactModal .address').html(_loggedInUser.address);
-				$('#contactModal .phone').html(_loggedInUser.phone);
+				$.get('/getuserjson/'+username, function(data) {
+					if(data.success == 'success') {
+						currentUser = JSON.parse(data.user);
+						$('#contactModal .name').html(currentUser.name);
+						$('#contactModal .email').html(currentUser.email);
+						$('#contactModal .address').html(currentUser.address);
+						$('#contactModal .phone').html(currentUser.phone);
+					}
+				});
 			});
 		},
 		
 		searchPage: function() {
+			_initAll();
+			_handleClasses(false);
+		},
+		
+		upgradePage: function() {
 			_initAll();
 			_handleClasses(false);
 		}
@@ -714,16 +724,38 @@ var __s = myapp,
 			$('.btn-upload').click(function() {
 				var imgElem = $('#img-list .img-preview:not(.completed)');
 				$(this).addClass('disabled');
+				
+				// Get num of photos left
+				var photosLeft = 0;
+				$.ajax({
+					url: '/getphotosleft/'+activePortfolio.id,
+					type: 'GET',
+					async: false,
+					dataType: 'json',
+					success: function(data) {
+						photosLeft = parseInt(data.result);
+					}
+				})
+				
 				for(var i=0; i<imgElem.length; i++) {
 					var	actionUrl = myapp.init.getUploadURL(user.username),
 						files = [imgElem[i].src],
 						imgId = $(imgElem[i]).attr('id'),
 						mimetype = $(imgElem[i]).attr('type');
-
-					if(files && files.length > 0) {
+					
+					if(files && files.length > 0 && photosLeft > 0) {
+						photosLeft = photosLeft - 1;
 						myapp.init.uploadFiles(imgId, files, activePortfolio.id, actionUrl, mimetype);	
 					} else {
-						alert('Selecione alguma foto para upload');
+						if(photosLeft == 0) {
+							var html = "<div id='alert-limit-error' class='alert alert-error fade in'>" +
+											"<strong>Oh Oh, limite atingido.</strong> Limite máximo de fotos para plano free é 15 fotos." +
+									    "</div>";
+							$('.modal-body').append(html);
+							break;
+						} else {
+							alert('Selecione alguma foto para upload');							
+						}
 					}					
 				}					
 			});
