@@ -45,9 +45,9 @@
 				<label class="control-label" for="inputWebsite">Website</label>
 				<div class="controls">
 					{% if user.website %}
-						<input type="text" id="inputWebsite" placeholder="website" value="{{ user.website }}">
+						<input type="url" id="inputWebsite" placeholder="http://www.meuwebsite.com.br" value="{{ user.website }}">
 					{% else %}
-						<input type="text" id="inputWebsite" placeholder="website" value="">
+						<input type="url" id="inputWebsite" placeholder="http://www.meuwebsite.com.br" value="">
 					{% endif %}
 				</div>
 			</div>

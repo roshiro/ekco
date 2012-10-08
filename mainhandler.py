@@ -165,12 +165,20 @@ class AuthFacebook(webapp.RequestHandler):
 			'location': '', 
 			'work': ''
 		}
-		if json['email']:
-			user['email'] = json['email']
-		if json['location']:
-			user['location'] = json['location']['name']
-		if hasattr(json, 'work') and json['work'] and json['work'][0]:
-			user['work'] = json['work'][0]['employer']['name']
+		try:
+			if json['email']:
+				user['email'] = json['email']
+		except:
+			logging.error('No email for ' + json['name'])
+		
+		try:
+			if json['location']:
+				user['location'] = json['location']['name']
+		except:
+			logging.error('No location for ' + json['name'])
+			
+		#if hasattr(json, 'work') and json['work'] and json['work'][0]:
+		#	user['work'] = json['work'][0]['employer']['name']
 		logging.info('User deserialized %s', user)
 		return user	
 
@@ -235,19 +243,22 @@ class ProfilePage(webapp.RequestHandler):
 	def get(self, username):
 		loggedUser = getLoggedInUser()
 		user = userService.get(username)
-		portfolios = portfolioService.getPortfolios(user)
-		upgradeMsg = showUpgradeMessage(user, portfolios)
-		template_values = {
-			'isLoggedIn': isLoggedIn(), 
-			'loggedInUser': loggedUser, 
-			'user': user, 
-			'portfolios': portfolios,
-			'faceAppId': FACEBOOK["appId"],
-			'isMyPage': isMyPage(user),
-			'showUpgradeMessage': upgradeMsg
-		}
-		path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'profile.html')	
-		self.response.out.write(template.render(path, template_values))
+		if user:
+			portfolios = portfolioService.getPortfolios(user)
+			upgradeMsg = showUpgradeMessage(user, portfolios)
+			template_values = {
+				'isLoggedIn': isLoggedIn(), 
+				'loggedInUser': loggedUser, 
+				'user': user, 
+				'portfolios': portfolios,
+				'faceAppId': FACEBOOK["appId"],
+				'isMyPage': isMyPage(user),
+				'showUpgradeMessage': upgradeMsg
+			}
+			path = os.path.join(os.path.dirname(__file__) + '/templates/app', 'profile.html')	
+			self.response.out.write(template.render(path, template_values))
+		else:
+			self.redirect('/404.html')
 
 class UpdateUser(webapp.RequestHandler):
 	def post(self):
