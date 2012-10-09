@@ -184,10 +184,15 @@ div.border-white:hover {border: 3px solid lightblue;}
 #portfolio-carousel .carousel-inner .item img {margin: auto;}
 
 /* Portfolio Edit */
-.portfolio-edit .item {position: relative;}
+.portfolio-edit .item {
+	position: relative; 
+	display: inline; 
+	width: 100px;	
+}
 .portfolio-edit .item .btn-delete {display: none;}
 .portfolio-edit .item:hover .btn-delete {position: absolute; bottom: 0; display: block;}
-
+.thumbnails.portfolio-show {text-align: center;}
+.thumbnails.portfolio-show a {cursor: pointer;}
 .location-wrapper {
 	background-color: white;
 	padding: 10px;

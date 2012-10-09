@@ -13,7 +13,7 @@
 	<div class="thumbnails portfolio-edit">
 		<ol>
 		{% for p in portfolio.photos %}
-			<li class="span2 item" photo="{{ p }}">
+			<li class="item" photo="{{ p }}">
 				<img photoid="{{ p }}" src="/serve/{{ p }}?width=160&height=160&quality=50" alt="{{ portfolio.name }}">
 				<button id="btn-new-portfolio" portfolioid="{{ portfolio.key.id }}" photoid="{{ p }}" class="btn btn-small btn-delete" type="button"><i class="icon-trash"></i> Excluir</button>
 			</li>

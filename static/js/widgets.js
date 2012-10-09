@@ -512,6 +512,10 @@ var __s = myapp,
 				var username = $(this).attr('username');
 				document.location.href="/photos/"+username;
 			});
+			$('a.thumb-portfolio-show').click(function(event) {
+				event.stopPropagation();
+				var photo = $(this).attr('photo');
+			});
 		},
 		
 		about: function() {
